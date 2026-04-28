@@ -217,6 +217,7 @@ export interface AutocompleteSuggestion {
   category: Category;
   brand?: TcgBrand;
   imageUrl?: string;
+  language?: string;
 }
 
 export interface AutocompleteResponse {
