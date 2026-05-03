@@ -139,6 +139,7 @@ export interface BaseCatalogItem {
   source: Source;
   createdAt: string;
   updatedAt: string;
+  localizedTitles?: Record<string, string>;
 }
 
 // ============ BRAND-SPECIFIC CATALOG ITEMS ============
@@ -218,6 +219,7 @@ export interface AutocompleteSuggestion {
   brand?: TcgBrand;
   imageUrl?: string;
   language?: string;
+  localizedTitles?: Record<string, string>;
 }
 
 export interface AutocompleteResponse {
