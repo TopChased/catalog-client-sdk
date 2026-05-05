@@ -104,9 +104,9 @@ export default class CatalogClient {
    * ```
    */
   public async searchWithFilters(
-    filters: Record<string, string | number | boolean | undefined>
+    filters: Record<string, string | number | boolean | undefined | string[]>
   ): Promise<CatalogSearchResponse> {
-    const params: Array<{ key: string; value: string | number | boolean }> = [];
+    const params: Array<{ key: string; value: string | number | boolean | string[] }> = [];
 
     for (const [key, value] of Object.entries(filters)) {
       if (value !== undefined && value !== '') {
@@ -149,9 +149,9 @@ export default class CatalogClient {
    * ```
    */
   public async listItems(
-    filters?: Record<string, string | number | boolean | undefined>
+    filters?: Record<string, string | number | boolean | undefined | string[]>
   ): Promise<CatalogSearchResponse> {
-    const params: Array<{ key: string; value: string | number | boolean }> = [];
+    const params: Array<{ key: string; value: string | number | boolean | string[] }> = [];
 
     if (filters) {
       for (const [key, value] of Object.entries(filters)) {
@@ -268,9 +268,9 @@ export class SearchQueryBuilder {
     return this;
   }
 
-  /** Filter by TCG brand (pokemon, yugioh, one_piece) */
-  public brand(brand: string): this {
-    this.filters.brand = brand;
+  /** Filter by TCG brand (pokemon, yugioh, one_piece) - accepts single or multiple */
+  public brand(brand: string | string[]): this {
+    this.filters.brand = Array.isArray(brand) ? brand.join(',') : brand;
     return this;
   }
 
@@ -286,9 +286,21 @@ export class SearchQueryBuilder {
     return this;
   }
 
-  /** Filter by card language */
-  public language(language: string): this {
-    this.filters.language = language;
+  /** Filter by card language - accepts single or multiple (comma-separated) */
+  public language(language: string | string[]): this {
+    this.filters.language = Array.isArray(language) ? language.join(',') : language;
+    return this;
+  }
+
+  /** Filter by card type (trainer, pokemon, energy) - accepts single or multiple */
+  public types(types: string | string[]): this {
+    this.filters.types = Array.isArray(types) ? types.join(',') : types;
+    return this;
+  }
+
+  /** Filter by card rarity - accepts single or multiple */
+  public rarity(rarity: string | string[]): this {
+    this.filters.rarity = Array.isArray(rarity) ? rarity.join(',') : rarity;
     return this;
   }
 

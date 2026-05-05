@@ -11,12 +11,31 @@ export function detectContext(): 'browser' | 'server' {
 }
 
 /**
+ * Safely convert a value to string for URL search params.
+ * Handles arrays by joining with comma, objects by JSON stringifying,
+ * and primitives by direct conversion.
+ */
+function safeParamValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+  if (Array.isArray(value)) {
+    return value.join(',');
+  }
+  // Fallback for objects or other types
+  return String(value);
+}
+
+/**
  * Build a URL with query parameters
  */
 export function buildURL(
   baseURL: string,
   path: string[],
-  searchParams?: Array<{ key: string; value: string | number | boolean }>
+  searchParams?: Array<{ key: string; value: string | number | boolean | string[] }>
 ): string {
   const url = new URL(baseURL);
 
@@ -31,7 +50,7 @@ export function buildURL(
 
   // Append search params
   for (const param of searchParams ?? []) {
-    url.searchParams.append(param.key, param.value.toString());
+    url.searchParams.append(param.key, safeParamValue(param.value));
   }
 
   return url.toString();

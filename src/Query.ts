@@ -116,8 +116,10 @@ export default class Query {
    * Set pagination (page number and items per page)
    */
   public paginate(page: number, itemsPerPage: number): this {
-    this.params.push({ key: 'offset', value: (page - 1) * itemsPerPage });
-    this.params.push({ key: 'limit', value: itemsPerPage });
+    this.params.push(
+      { key: 'offset', value: (page - 1) * itemsPerPage }, 
+      { key: 'limit', value: itemsPerPage }
+    );
     return this;
   }
 
@@ -125,8 +127,10 @@ export default class Query {
    * Set the sort field and order
    */
   public sort(field: string, order: 'asc' | 'desc'): this {
-    this.params.push({ key: 'sortBy', value: field });
-    this.params.push({ key: 'sortOrder', value: order });
+    this.params.push(
+      { key: 'sortBy', value: field }, 
+      { key: 'sortOrder', value: order }
+    );
     return this;
   }
 }

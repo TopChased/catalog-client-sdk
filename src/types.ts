@@ -59,14 +59,14 @@ export interface PokemonCardVariant {
 }
 
 export interface PokemonCardDetails extends SharedTcgCardDetails {
+  cardType: 'energy' | 'trainer' | 'pokemon';
   variants_detailed?: PokemonCardVariant[];
   category: string;
   pokemon?: string[];
   pokedex?: number[];
   illustrator?: string;
   hp?: number;
-  type?: string;
-  stage?: 'energy' | 'trainer' | 'basic' | 'stage1' | 'stage2' | 'vmax' | 'ex';
+  energyType?: string; // Fire, Water, etc.
   evolveFrom?: string;
 }
 
@@ -128,13 +128,18 @@ export interface ConsoleDetails {
 
 // ============ BASE CATALOG ITEM ============
 
+export interface ImageUrls {
+  high?: string;
+  low?: string;
+}
+
 export interface BaseCatalogItem {
   _id: string;
   title: string;
   normalizedTitle: string;
   slug: string;
   category: Category;
-  imageUrl?: string;
+  imageUrl?: ImageUrls;
   searchText: string[];
   source: Source;
   createdAt: string;
@@ -217,8 +222,10 @@ export interface AutocompleteSuggestion {
   slug: string;
   category: Category;
   brand?: TcgBrand;
-  imageUrl?: string;
+  imageUrl?: ImageUrls;
   language?: string;
+  rarity?: string;
+  cardType?: string;
   localizedTitles?: Record<string, string>;
 }
 
