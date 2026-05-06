@@ -172,12 +172,14 @@ export default class CatalogClient {
    *
    * ```ts
    * const suggestions = await client.autocomplete('char');
+   * const fiveSuggestions = await client.autocomplete('char', undefined, undefined, 5);
    * ```
    */
   public async autocomplete(
     q: string,
     category?: string,
-    brand?: string
+    brand?: string,
+    limit?: number
   ): Promise<AutocompleteSuggestion[]> {
     const params: Array<{ key: string; value: string | number | boolean }> = [
       { key: 'q', value: q },
@@ -189,6 +191,10 @@ export default class CatalogClient {
     if (brand) {
       params.push({ key: 'brand', value: brand });
     }
+    if (limit !== undefined) {
+      params.push({ key: 'limit', value: limit });
+    }
+
 
     const url = buildURL(`${this.baseURL}/catalog/autocomplete`, [], params);
     const response = await this.fetchJSON<AutocompleteResponse>(url);
