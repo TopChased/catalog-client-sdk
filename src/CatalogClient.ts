@@ -340,6 +340,16 @@ export class SearchQueryBuilder {
     return this;
   }
 
+  /**
+   * Set a cursor for cursor-based pagination.
+   * Pass the `nextCursor` value from a previous search response to get the next page.
+   * When a cursor is set, offset is ignored by the API.
+   */
+  public cursor(cursor: string): this {
+    this.filters.cursor = cursor;
+    return this;
+  }
+
   /** Set pagination (page number and items per page) */
   public paginate(page: number, itemsPerPage: number): this {
     this.filters.offset = (page - 1) * itemsPerPage;

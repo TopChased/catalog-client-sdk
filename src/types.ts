@@ -219,6 +219,7 @@ export interface CatalogSearchResponse {
   page: number;
   limit: number;
   hasMore: boolean;
+  nextCursor?: string;
 }
 
 export interface AutocompleteSuggestion {
