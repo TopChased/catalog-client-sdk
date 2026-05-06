@@ -294,7 +294,7 @@ export class SearchQueryBuilder {
 
   /** Filter by card type (trainer, pokemon, energy) - accepts single or multiple */
   public types(types: string | string[]): this {
-    this.filters.types = Array.isArray(types) ? types.join(',') : types;
+    this.filters.cardType = Array.isArray(types) ? types.join(',') : types;
     return this;
   }
 
