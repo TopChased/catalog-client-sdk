@@ -1,10 +1,10 @@
-import Query from './Query';
 import { buildURL, detectContext } from './utils';
-import type {
-  CatalogItem,
-  CatalogSearchResponse,
-  AutocompleteResponse,
-  AutocompleteSuggestion,
+import {
+  type CatalogItem,
+  type CatalogSearchResponse,
+  type AutocompleteResponse,
+  type AutocompleteSuggestion,
+  Context,
 } from './types';
 
 /**
@@ -38,9 +38,9 @@ export default class CatalogClient {
    * The fetch implementation used for making HTTP requests.
    * Auto-detects browser vs server context.
    */
-  public static fetch: typeof fetch =
-    detectContext() === 'browser'
-      ? (...params: Parameters<typeof fetch>) => window.fetch(...params)
+  public static readonly fetch: typeof fetch =
+    detectContext() === Context.Browser
+      ? (...params: Parameters<typeof fetch>) => globalThis.fetch(...params)
       : fetch;
 
   /**
@@ -255,8 +255,8 @@ export default class CatalogClient {
  * ```
  */
 export class SearchQueryBuilder {
-  private client: CatalogClient;
-  private filters: Record<string, string | number | boolean | undefined> = {};
+  private readonly client: CatalogClient;
+  private readonly filters: Record<string, string | number | boolean | undefined> = {};
 
   public constructor(client: CatalogClient) {
     this.client = client;

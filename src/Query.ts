@@ -11,7 +11,8 @@
  *   .language('en')
  *   .setName('Base Set')
  *   .paginate(1, 20)
- *   .sort('title', 'asc');
+ *   .sort('title', 'asc')
+ *   .limit(5);
  * ```
  */
 export default class Query {

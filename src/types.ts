@@ -15,6 +15,12 @@ export type SortBy = 'relevance' | 'title' | 'createdAt';
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
 
+/** Context **/
+export enum Context {
+  Browser = 'browser',
+  Server = 'server',
+}
+
 // ============ SOURCE ============
 
 export interface Source {
@@ -48,7 +54,7 @@ export interface SharedTcgSealedDetails {
 export interface PokemonCardVariant {
   type: string;
   subtype?: string;
-  size?: 'standard' | 'jumbo' | string;
+  size?: 'standard' | 'jumbo';
   stamp?: string[];
   foil?: string;
   thirdParty?: {

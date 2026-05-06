@@ -1,12 +1,14 @@
+import { Context } from "./types";
+
 /**
  * Detect the current running context (browser vs server)
  */
-export function detectContext(): 'browser' | 'server' {
+export function detectContext(): Context.Browser | Context.Server {
   try {
-    const isBrowser = typeof window !== 'undefined';
-    return isBrowser ? 'browser' : 'server';
+    const isBrowser = globalThis.window !== undefined;
+    return isBrowser ? Context.Browser : Context.Server;
   } catch {
-    return 'server';
+    return Context.Server;
   }
 }
 
@@ -15,7 +17,7 @@ export function detectContext(): 'browser' | 'server' {
  * Handles arrays by joining with comma, objects by JSON stringifying,
  * and primitives by direct conversion.
  */
-function safeParamValue(value: unknown): string {
+export function safeParamValue(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
   }
@@ -25,8 +27,13 @@ function safeParamValue(value: unknown): string {
   if (Array.isArray(value)) {
     return value.join(',');
   }
+  // if (typeof value === 'object') {
+  //   return JSON.stringify(value);
+  // }
   // Fallback for objects or other types
-  return String(value);
+  // return String(value);
+  console.error("Unsupported param type ", typeof value, "for the following: ", value)
+  return 'error'
 }
 
 /**
