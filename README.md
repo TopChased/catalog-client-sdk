@@ -69,6 +69,7 @@ const results = await client.search()
   .illustrator('Ken Sugimori') // Filter by illustrator
   .platform('nintendo-switch') // For video games/consoles
   .paginate(1, 20)             // Page number, items per page
+  .limit(5)                    // Limit number of items returned
   .sort('title', 'asc')        // Sort field and order
   .execute();
 ```
@@ -208,6 +209,17 @@ npm test
 
 # Type check
 npm run typecheck
+```
+
+# Creating Package for Install
+```
+npm run build
+npm pack
+```
+
+To install locally to other repos:
+```
+npm add ../catalog-client/catalog-client-1.0.0.tgz
 ```
 
 ## License

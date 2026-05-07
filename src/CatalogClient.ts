@@ -1,10 +1,10 @@
-import Query from './Query';
 import { buildURL, detectContext } from './utils';
-import type {
-  CatalogItem,
-  CatalogSearchResponse,
-  AutocompleteResponse,
-  AutocompleteSuggestion,
+import {
+  type CatalogItem,
+  type CatalogSearchResponse,
+  type AutocompleteResponse,
+  type AutocompleteSuggestion,
+  Context,
 } from './types';
 
 /**
@@ -38,9 +38,9 @@ export default class CatalogClient {
    * The fetch implementation used for making HTTP requests.
    * Auto-detects browser vs server context.
    */
-  public static fetch: typeof fetch =
-    detectContext() === 'browser'
-      ? (...params: Parameters<typeof fetch>) => window.fetch(...params)
+  public static readonly fetch: typeof fetch =
+    detectContext() === Context.Browser
+      ? (...params: Parameters<typeof fetch>) => globalThis.fetch(...params)
       : fetch;
 
   /**
@@ -104,9 +104,9 @@ export default class CatalogClient {
    * ```
    */
   public async searchWithFilters(
-    filters: Record<string, string | number | boolean | undefined>
+    filters: Record<string, string | number | boolean | undefined | string[]>
   ): Promise<CatalogSearchResponse> {
-    const params: Array<{ key: string; value: string | number | boolean }> = [];
+    const params: Array<{ key: string; value: string | number | boolean | string[] }> = [];
 
     for (const [key, value] of Object.entries(filters)) {
       if (value !== undefined && value !== '') {
@@ -149,9 +149,9 @@ export default class CatalogClient {
    * ```
    */
   public async listItems(
-    filters?: Record<string, string | number | boolean | undefined>
+    filters?: Record<string, string | number | boolean | undefined | string[]>
   ): Promise<CatalogSearchResponse> {
-    const params: Array<{ key: string; value: string | number | boolean }> = [];
+    const params: Array<{ key: string; value: string | number | boolean | string[] }> = [];
 
     if (filters) {
       for (const [key, value] of Object.entries(filters)) {
@@ -172,12 +172,14 @@ export default class CatalogClient {
    *
    * ```ts
    * const suggestions = await client.autocomplete('char');
+   * const fiveSuggestions = await client.autocomplete('char', undefined, undefined, 5);
    * ```
    */
   public async autocomplete(
     q: string,
     category?: string,
-    brand?: string
+    brand?: string,
+    limit?: number
   ): Promise<AutocompleteSuggestion[]> {
     const params: Array<{ key: string; value: string | number | boolean }> = [
       { key: 'q', value: q },
@@ -189,6 +191,10 @@ export default class CatalogClient {
     if (brand) {
       params.push({ key: 'brand', value: brand });
     }
+    if (limit !== undefined) {
+      params.push({ key: 'limit', value: limit });
+    }
+
 
     const url = buildURL(`${this.baseURL}/catalog/autocomplete`, [], params);
     const response = await this.fetchJSON<AutocompleteResponse>(url);
@@ -249,8 +255,8 @@ export default class CatalogClient {
  * ```
  */
 export class SearchQueryBuilder {
-  private client: CatalogClient;
-  private filters: Record<string, string | number | boolean | undefined> = {};
+  private readonly client: CatalogClient;
+  private readonly filters: Record<string, string | number | boolean | undefined> = {};
 
   public constructor(client: CatalogClient) {
     this.client = client;
@@ -268,9 +274,9 @@ export class SearchQueryBuilder {
     return this;
   }
 
-  /** Filter by TCG brand (pokemon, yugioh, one_piece) */
-  public brand(brand: string): this {
-    this.filters.brand = brand;
+  /** Filter by TCG brand (pokemon, yugioh, one_piece) - accepts single or multiple */
+  public brand(brand: string | string[]): this {
+    this.filters.brand = Array.isArray(brand) ? brand.join(',') : brand;
     return this;
   }
 
@@ -286,9 +292,21 @@ export class SearchQueryBuilder {
     return this;
   }
 
-  /** Filter by card language */
-  public language(language: string): this {
-    this.filters.language = language;
+  /** Filter by card language - accepts single or multiple (comma-separated) */
+  public language(language: string | string[]): this {
+    this.filters.language = Array.isArray(language) ? language.join(',') : language;
+    return this;
+  }
+
+  /** Filter by card type (trainer, pokemon, energy) - accepts single or multiple */
+  public types(types: string | string[]): this {
+    this.filters.cardType = Array.isArray(types) ? types.join(',') : types;
+    return this;
+  }
+
+  /** Filter by card rarity - accepts single or multiple */
+  public rarity(rarity: string | string[]): this {
+    this.filters.rarity = Array.isArray(rarity) ? rarity.join(',') : rarity;
     return this;
   }
 
@@ -319,6 +337,16 @@ export class SearchQueryBuilder {
   /** Set the offset for pagination */
   public offset(offset: number): this {
     this.filters.offset = offset;
+    return this;
+  }
+
+  /**
+   * Set a cursor for cursor-based pagination.
+   * Pass the `nextCursor` value from a previous search response to get the next page.
+   * When a cursor is set, offset is ignored by the API.
+   */
+  public cursor(cursor: string): this {
+    this.filters.cursor = cursor;
     return this;
   }
 

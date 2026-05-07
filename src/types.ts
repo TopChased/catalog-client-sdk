@@ -15,6 +15,12 @@ export type SortBy = 'relevance' | 'title' | 'createdAt';
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
 
+/** Context **/
+export enum Context {
+  Browser = 'browser',
+  Server = 'server',
+}
+
 // ============ SOURCE ============
 
 export interface Source {
@@ -48,7 +54,7 @@ export interface SharedTcgSealedDetails {
 export interface PokemonCardVariant {
   type: string;
   subtype?: string;
-  size?: 'standard' | 'jumbo' | string;
+  size?: 'standard' | 'jumbo';
   stamp?: string[];
   foil?: string;
   thirdParty?: {
@@ -59,14 +65,14 @@ export interface PokemonCardVariant {
 }
 
 export interface PokemonCardDetails extends SharedTcgCardDetails {
+  cardType: 'energy' | 'trainer' | 'pokemon';
   variants_detailed?: PokemonCardVariant[];
   category: string;
   pokemon?: string[];
   pokedex?: number[];
   illustrator?: string;
   hp?: number;
-  type?: string;
-  stage?: 'energy' | 'trainer' | 'basic' | 'stage1' | 'stage2' | 'vmax' | 'ex';
+  energyType?: string; // Fire, Water, etc.
   evolveFrom?: string;
 }
 
@@ -128,13 +134,18 @@ export interface ConsoleDetails {
 
 // ============ BASE CATALOG ITEM ============
 
+export interface ImageUrls {
+  high?: string;
+  low?: string;
+}
+
 export interface BaseCatalogItem {
   _id: string;
   title: string;
   normalizedTitle: string;
   slug: string;
   category: Category;
-  imageUrl?: string;
+  imageUrl?: ImageUrls;
   searchText: string[];
   source: Source;
   createdAt: string;
@@ -208,6 +219,7 @@ export interface CatalogSearchResponse {
   page: number;
   limit: number;
   hasMore: boolean;
+  nextCursor?: string;
 }
 
 export interface AutocompleteSuggestion {
@@ -217,8 +229,10 @@ export interface AutocompleteSuggestion {
   slug: string;
   category: Category;
   brand?: TcgBrand;
-  imageUrl?: string;
+  imageUrl?: ImageUrls;
   language?: string;
+  rarity?: string;
+  cardType?: string;
   localizedTitles?: Record<string, string>;
 }
 
