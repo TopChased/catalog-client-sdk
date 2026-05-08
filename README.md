@@ -219,7 +219,8 @@ npm pack
 
 To install locally to other repos:
 ```
-npm add ../catalog-client/catalog-client-1.0.0.tgz
+# point to tar ie
+npm add ../catalog-client-sdk/topchased-catalog-client-1.0.0.tgz
 ```
 
 ## License
