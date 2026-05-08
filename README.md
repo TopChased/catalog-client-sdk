@@ -25,7 +25,7 @@ pnpm add /path/to/catalog/client
 ## Quick Start
 
 ```ts
-import { CatalogClient } from '@catalog/client';
+import { CatalogClient } from '@topchased/catalog-client-sdk';
 
 // Create a client pointing to your Catalog Engine API
 const client = new CatalogClient('http://localhost:3001/api/v1');
@@ -123,7 +123,7 @@ const suggestions = await client.autocomplete('char', 'tcg', 'pokemon');
 You can also use the standalone `Query` class to build query parameters:
 
 ```ts
-import { Query } from '@catalog/client';
+import { Query } from '@topchased/catalog-client-sdk';
 
 const query = Query.create()
   .search('charizard')
@@ -141,7 +141,7 @@ const query = Query.create()
 The SDK includes type guards for narrowing catalog item types:
 
 ```ts
-import { isPokemonCatalogItem, isVideoGameCatalogItem } from '@catalog/client';
+import { isPokemonCatalogItem, isVideoGameCatalogItem } from '@topchased/catalog-client-sdk';
 
 if (isPokemonCatalogItem(item)) {
   console.log(item.brand); // 'pokemon'
@@ -192,7 +192,7 @@ The SDK works in the browser out of the box. It auto-detects the environment and
 ### ES Module
 
 ```ts
-import { CatalogClient } from '@catalog/client';
+import { CatalogClient } from '@topchased/catalog-client-sdk';
 ```
 
 ## Development
