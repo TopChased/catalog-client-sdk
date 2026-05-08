@@ -8,7 +8,7 @@ Works in both **Node.js** and **browser** environments.
 
 ## Installation
 
-# Locally build with
+# Build Locally
 ```bash
 # Create the package to later reference and build from
 npm pack
@@ -20,6 +20,12 @@ npm install /path/to/catalog/client
 yarn add /path/to/catalog/client
 # or
 pnpm add /path/to/catalog/client
+```
+
+## Publish 
+
+```bash
+npm publish --access public
 ```
 
 ## Quick Start

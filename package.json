@@ -6,9 +6,6 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "browser": "./dist/index.browser.global.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@topchased"
-  },
   "exports": {
     ".": {
       "require": {
