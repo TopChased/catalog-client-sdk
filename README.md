@@ -1,4 +1,4 @@
-# @catalog/client
+# @TopChased/catalog-client-sdk
 
 SDK for communicating with the **Catalog Engine API** — a language binding for frontend applications.
 
