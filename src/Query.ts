@@ -66,6 +66,14 @@ export default class Query {
   }
 
   /**
+   * Filter by Pokemon name (filters the pokemon field on PokemonCardDetails)
+   */
+  public pokemonName(name: string): this {
+    this.params.push({ key: 'pokemon', value: name });
+    return this;
+  }
+
+  /**
    * Filter by card language
    */
   public language(language: string): this {

@@ -298,6 +298,12 @@ export class SearchQueryBuilder {
     return this;
   }
 
+  /** Filter by Pokemon name (filters the pokemon field on PokemonCardDetails) */
+  public pokemonName(name: string): this {
+    this.filters.pokemon = name;
+    return this;
+  }
+
   /** Filter by card type (trainer, pokemon, energy) - accepts single or multiple */
   public types(types: string | string[]): this {
     this.filters.cardType = Array.isArray(types) ? types.join(',') : types;
