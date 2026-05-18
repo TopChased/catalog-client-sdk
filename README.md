@@ -10,6 +10,9 @@ Works in both **Node.js** and **browser** environments.
 
 # Build Locally
 ```bash
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
 # Create the package to later reference and build from
 npm pack
 ```
