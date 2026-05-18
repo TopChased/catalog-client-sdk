@@ -299,8 +299,8 @@ export class SearchQueryBuilder {
   }
 
   /** Filter by Pokemon name (filters the pokemon field on PokemonCardDetails) */
-  public pokemonName(name: string): this {
-    this.filters.pokemon = name;
+  public pokemonName(pokemonName: string): this {
+    this.filters.pokemonName = pokemonName;
     return this;
   }
 
