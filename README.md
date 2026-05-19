@@ -10,6 +10,9 @@ Works in both **Node.js** and **browser** environments.
 
 # Build Locally
 ```bash
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
 # Create the package to later reference and build from
 npm pack
 ```
@@ -29,6 +32,11 @@ npm publish --access public
 ```
 
 ## Quick Start
+
+Add the package to your projct
+```
+npm install @topchased/catalog-client-sdk
+```
 
 ```ts
 import { CatalogClient } from '@topchased/catalog-client-sdk';
