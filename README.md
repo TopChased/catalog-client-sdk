@@ -33,6 +33,11 @@ npm publish --access public
 
 ## Quick Start
 
+Add the package to your projct
+```
+npm install @topchased/catalog-client-sdk
+```
+
 ```ts
 import { CatalogClient } from '@topchased/catalog-client-sdk';
 
