@@ -136,6 +136,23 @@ export default class CatalogClient {
     return this.fetchJSON<CatalogItem | null>(url);
   }
 
+  // ============ GET CARD BY LANGUAGE, SET CODE, AND CARD NUMBER ============
+
+  /**
+   * Get a single card by its language, set code, and card number.
+   *
+   * ```ts
+   * const card = await client.getCard('en', 'sm8', '1');
+   * if (card) {
+   *   console.log(card.title);
+   * }
+   * ```
+   */
+  public async getCard(language: string, setCode: string, cardNumber: string): Promise<CatalogItem | null> {
+    const url = `${this.baseURL}/catalog/card/${encodeURIComponent(language)}/${encodeURIComponent(setCode)}/${encodeURIComponent(cardNumber)}`;
+    return this.fetchJSON<CatalogItem | null>(url);
+  }
+
   // ============ LIST ITEMS ============
 
   /**
