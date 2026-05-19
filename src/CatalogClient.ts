@@ -6,6 +6,7 @@ import {
   type AutocompleteSuggestion,
   Context,
 } from './types';
+import { Illustrator, IllustratorsResponse } from './Illustrators/types';
 
 /**
  * CatalogClient - SDK for communicating with the Catalog Engine API.
@@ -199,6 +200,55 @@ export default class CatalogClient {
     const url = buildURL(`${this.baseURL}/catalog/autocomplete`, [], params);
     const response = await this.fetchJSON<AutocompleteResponse>(url);
     return response?.suggestions ?? [];
+  }
+
+  // ============ ILLUSTRATORS ============
+
+  /**
+   * Get a paginated list of illustrators, with optional search.
+   *
+   * ```ts
+   * // Get all illustrators
+   * const illustrators = await client.getIllustrators();
+   *
+   * // Search illustrators by name
+   * const results = await client.getIllustrators({ q: 'sugimori', limit: 10 });
+   * ```
+   */
+  public async getIllustrators(
+    filters?: { q?: string; limit?: number; offset?: number }
+  ): Promise<IllustratorsResponse> {
+    const params: Array<{ key: string; value: string | number | boolean }> = [];
+
+    if (filters) {
+      if (filters.q) {
+        params.push({ key: 'q', value: filters.q });
+      }
+      if (filters.limit !== undefined) {
+        params.push({ key: 'limit', value: filters.limit });
+      }
+      if (filters.offset !== undefined) {
+        params.push({ key: 'offset', value: filters.offset });
+      }
+    }
+
+    const url = buildURL(`${this.baseURL}/illustrators`, [], params);
+    return this.fetchJSON<IllustratorsResponse>(url);
+  }
+
+  /**
+   * Get a single illustrator by its ID.
+   *
+   * ```ts
+   * const illustrator = await client.getIllustrator('illustrator-ken-sugimori');
+   * if (illustrator) {
+   *   console.log(illustrator.name, illustrator.cardCount);
+   * }
+   * ```
+   */
+  public async getIllustrator(id: string): Promise<Illustrator | null> {
+    const url = `${this.baseURL}/illustrators/${encodeURIComponent(id)}`;
+    return this.fetchJSON<Illustrator | null>(url);
   }
 
   // ============ INTERNAL ============

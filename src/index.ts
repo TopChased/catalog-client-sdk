@@ -38,6 +38,11 @@ export type {
   AutocompleteResponse,
 } from './types';
 
+export type {
+  Illustrator,
+  IllustratorsResponse,
+} from './Illustrators/types';
+
 // Export runtime values (type guards, etc.)
 export {
   isPokemonCatalogItem,
