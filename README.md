@@ -4,7 +4,7 @@ SDK for communicating with the **Catalog Engine API** — a language binding for
 
 Inspired by the [TCGdex JavaScript SDK](https://github.com/tcgdex/javascript-sdk), this SDK provides a fluent, type-safe interface for querying catalog items (TCG cards, video games, consoles, etc.) from the Catalog Engine microservice.
 
-Works in both **Node.js** and **browser** environments.
+Works in both **Node.js** and **browser** environments. See more at [NPM](https://www.npmjs.com/package/@topchased/catalog-client-sdk).
 
 ## Installation
 
