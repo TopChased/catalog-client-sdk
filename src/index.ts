@@ -7,6 +7,7 @@ export type {
   Category,
   TcgBrand,
   TcgProductType,
+  SupportedLanguageCode,
   SortBy,
   SortOrder,
   Source,
@@ -43,8 +44,9 @@ export type {
   IllustratorsResponse,
 } from './Illustrators/types';
 
-// Export runtime values (type guards, etc.)
+// Export runtime values (type guards, constants, etc.)
 export {
+  SUPPORTED_LANGUAGE_CODES,
   isPokemonCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
