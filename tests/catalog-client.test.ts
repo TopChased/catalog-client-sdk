@@ -230,7 +230,7 @@ describe('CatalogClient', () => {
         json: async () => ({ suggestions: [] }),
       } as Response);
 
-      await client.autocomplete('char', undefined, undefined, 5);
+      await client.autocomplete('char', undefined, undefined, undefined, 5);
 
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('limit=5');
@@ -242,7 +242,7 @@ describe('CatalogClient', () => {
         json: async () => ({ suggestions: [] }),
       } as Response);
 
-      await client.autocomplete('char', undefined, undefined, undefined, 'en');
+      await client.autocomplete('char', undefined, undefined, 'en');
 
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('language=en');
@@ -276,7 +276,7 @@ describe('CatalogClient', () => {
         json: async () => ({ suggestions: [] }),
       } as Response);
 
-      await client.autocomplete('charizard', 'tcg', 'pokemon', 10, 'en');
+      await client.autocomplete('charizard', 'tcg', 'pokemon', 'en', 10);
 
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('q=charizard');

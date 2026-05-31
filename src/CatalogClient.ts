@@ -190,24 +190,24 @@ export default class CatalogClient {
    *
    * ```ts
    * const suggestions = await client.autocomplete('char');
-   * const fiveSuggestions = await client.autocomplete('char', undefined, undefined, 5);
-   * const englishSuggestions = await client.autocomplete('char', undefined, undefined, 5, 'en');
+   * const englishSuggestions = await client.autocomplete('char', undefined, undefined, 'en');
+   * const fiveEnglishSuggestions = await client.autocomplete('char', undefined, undefined, 'en', 5);
    * ```
    *
    * @param q - The search query string (minimum 2 characters)
    * @param category - Optional category filter (e.g. "tcg", "video_game")
    * @param brand - Optional brand filter (e.g. "pokemon", "yugioh", "one_piece")
-   * @param limit - Optional max number of suggestions (1-25, defaults to 10)
    * @param language - Optional language code to scope suggestions.
    *   See {@link SUPPORTED_LANGUAGE_CODES} for accepted values.
+   * @param limit - Optional max number of suggestions (1-25, defaults to 10)
    * @returns Array of autocomplete suggestions
    */
   public async autocomplete(
     q: string,
     category?: string,
     brand?: string,
-    limit?: number,
-    language?: string
+    language?: string,
+    limit?: number
   ): Promise<AutocompleteSuggestion[]> {
     const params: Array<{ key: string; value: string | number | boolean }> = [
       { key: 'q', value: q },
@@ -219,11 +219,11 @@ export default class CatalogClient {
     if (brand) {
       params.push({ key: 'brand', value: brand });
     }
-    if (limit !== undefined) {
-      params.push({ key: 'limit', value: limit });
-    }
     if (language) {
       params.push({ key: 'language', value: language });
+    }
+    if (limit !== undefined) {
+      params.push({ key: 'limit', value: limit });
     }
 
     const url = buildURL(`${this.baseURL}/catalog/autocomplete`, [], params);
