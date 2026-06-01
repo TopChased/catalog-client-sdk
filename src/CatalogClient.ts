@@ -383,6 +383,17 @@ export class SearchQueryBuilder {
     return this;
   }
 
+  /**
+   * When enabled, the search will also include all evolution stages of the
+   * specified Pokemon. For example, searching for "Squirtle" with includeEvolutions
+   * will also return Wartortle and Blastoise cards.
+   * Only works when pokemonName filter is also set.
+   */
+  public includeEvolutions(include: boolean): this {
+    this.filters.includeEvolutions = include ? 'true' : 'false';
+    return this;
+  }
+
   /** Filter by card type (trainer, pokemon, energy) - accepts single or multiple */
   public types(types: string | string[]): this {
     this.filters.cardType = Array.isArray(types) ? types.join(',') : types;

@@ -437,6 +437,16 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('pokemonName=Pikachu');
   });
 
+  test('should support pokemonName with include evolutions filter', async () => {
+    await client.search()
+      .pokemonName('Pikachu')
+      .includeEvolutions(true)
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('pokemonName=Pikachu&includeEvolutions=true');
+  });
+
   test('should support types filter', async () => {
     await client.search()
       .types('pokemon')
