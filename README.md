@@ -28,6 +28,7 @@ pnpm add /path/to/catalog/client
 ## Publish 
 
 ```bash
+npm login
 npm publish --access public
 ```
 
