@@ -10,7 +10,7 @@ export type TcgBrand = 'pokemon' | 'yugioh' | 'one_piece';
 export type TcgProductType = 'card' | 'sealed_product';
 
 /** Sort options for search results */
-export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber';
+export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity';
 
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
