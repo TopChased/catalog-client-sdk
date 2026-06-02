@@ -40,7 +40,7 @@ export const SUPPORTED_LANGUAGE_CODES = [
 export type SupportedLanguageCode = typeof SUPPORTED_LANGUAGE_CODES[number];
 
 /** Sort options for search results */
-export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber';
+export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity';
 
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';

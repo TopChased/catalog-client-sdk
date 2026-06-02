@@ -437,6 +437,16 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('pokemonName=Pikachu');
   });
 
+  test('should support pokemonName with include evolutions filter', async () => {
+    await client.search()
+      .pokemonName('Pikachu')
+      .includeEvolutions(true)
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('pokemonName=Pikachu&includeEvolutions=true');
+  });
+
   test('should support types filter', async () => {
     await client.search()
       .types('pokemon')
@@ -498,5 +508,87 @@ describe('SearchQueryBuilder', () => {
 
     const url = mockFetch.mock.calls[0][0] as string;
     expect(url).toContain('offset=10');
+  });
+
+  describe('sort', () => {
+    test('should sort by rarity asc', async () => {
+      await client.search()
+        .sort('rarity', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=rarity');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by rarity desc', async () => {
+      await client.search()
+        .sort('rarity', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=rarity');
+      expect(url).toContain('sortOrder=desc');
+    });
+
+    test('should sort by cardNumber asc', async () => {
+      await client.search()
+        .sort('cardNumber', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=cardNumber');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by pokedex desc', async () => {
+      await client.search()
+        .sort('pokedex', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=pokedex');
+      expect(url).toContain('sortOrder=desc');
+    });
+
+    test('should sort by illustrator asc', async () => {
+      await client.search()
+        .sort('illustrator', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=illustrator');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by createdAt desc', async () => {
+      await client.search()
+        .sort('createdAt', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=createdAt');
+      expect(url).toContain('sortOrder=desc');
+    });
+
+    test('should sort by title asc', async () => {
+      await client.search()
+        .sort('title', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=title');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by relevance desc', async () => {
+      await client.search()
+        .sort('relevance', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=relevance');
+      expect(url).toContain('sortOrder=desc');
+    });
   });
 });

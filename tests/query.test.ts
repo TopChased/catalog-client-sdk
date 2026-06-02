@@ -75,10 +75,58 @@ describe('Query builder', () => {
     ]);
   });
 
-  test('should chain sort method', () => {
+  test('should chain sort method with title asc', () => {
     const query = Query.create().sort('title', 'asc');
     expect(query.params).toEqual([
       { key: 'sortBy', value: 'title' },
+      { key: 'sortOrder', value: 'asc' },
+    ]);
+  });
+
+  test('should chain sort method with rarity desc', () => {
+    const query = Query.create().sort('rarity', 'desc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'rarity' },
+      { key: 'sortOrder', value: 'desc' },
+    ]);
+  });
+
+  test('should chain sort method with cardNumber asc', () => {
+    const query = Query.create().sort('cardNumber', 'asc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'cardNumber' },
+      { key: 'sortOrder', value: 'asc' },
+    ]);
+  });
+
+  test('should chain sort method with pokedex desc', () => {
+    const query = Query.create().sort('pokedex', 'desc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'pokedex' },
+      { key: 'sortOrder', value: 'desc' },
+    ]);
+  });
+
+  test('should chain sort method with illustrator asc', () => {
+    const query = Query.create().sort('illustrator', 'asc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'illustrator' },
+      { key: 'sortOrder', value: 'asc' },
+    ]);
+  });
+
+  test('should chain sort method with createdAt desc', () => {
+    const query = Query.create().sort('createdAt', 'desc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'createdAt' },
+      { key: 'sortOrder', value: 'desc' },
+    ]);
+  });
+
+  test('should chain sort method with relevance asc', () => {
+    const query = Query.create().sort('relevance', 'asc');
+    expect(query.params).toEqual([
+      { key: 'sortBy', value: 'relevance' },
       { key: 'sortOrder', value: 'asc' },
     ]);
   });

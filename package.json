@@ -1,6 +1,6 @@
 {
   "name": "@topchased/catalog-client-sdk",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "SDK for communicating with the Catalog Engine API - a language binding for frontend applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
