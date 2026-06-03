@@ -541,6 +541,16 @@ describe('SearchQueryBuilder', () => {
       expect(url).toContain('sortOrder=asc');
     });
 
+    test('should sort by cardNumber desc', async () => {
+      await client.search()
+        .sort('cardNumber', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=cardNumber');
+      expect(url).toContain('sortOrder=desc');
+    });
+
     test('should sort by pokedex desc', async () => {
       await client.search()
         .sort('pokedex', 'desc')
@@ -551,6 +561,17 @@ describe('SearchQueryBuilder', () => {
       expect(url).toContain('sortOrder=desc');
     });
 
+
+    test('should sort by pokedex asc', async () => {
+      await client.search()
+        .sort('pokedex', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=pokedex');
+      expect(url).toContain('sortOrder=asc');
+    });
+
     test('should sort by illustrator asc', async () => {
       await client.search()
         .sort('illustrator', 'asc')
@@ -559,6 +580,16 @@ describe('SearchQueryBuilder', () => {
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('sortBy=illustrator');
       expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by illustrator desc', async () => {
+      await client.search()
+        .sort('illustrator', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=illustrator');
+      expect(url).toContain('sortOrder=desc');
     });
 
     test('should sort by createdAt desc', async () => {
@@ -578,6 +609,26 @@ describe('SearchQueryBuilder', () => {
 
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('sortBy=title');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by title desc', async () => {
+      await client.search()
+        .sort('title', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=title');
+      expect(url).toContain('sortOrder=desc');
+    });
+
+    test('should sort by relevance asc', async () => {
+      await client.search()
+        .sort('relevance', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=relevance');
       expect(url).toContain('sortOrder=asc');
     });
 
