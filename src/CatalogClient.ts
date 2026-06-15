@@ -377,13 +377,7 @@ export class SearchQueryBuilder {
     return this;
   }
 
-  /** Filter by Pokemon name (filters the pokemon field on PokemonCardDetails) */
-  public pokemonName(pokemonName: string): this {
-    this.filters.pokemonName = pokemonName;
-    return this;
-  }
-
-  /** Filter by character name from franchise (filters the character field on RiftboundCardDetails) */
+  /** Filter by character name from franchise (filters the character field on RiftboundCardDetails or PokemonCardDetails) */
   public character(character: string): this {
     this.filters.character = character;
     return this;
@@ -393,10 +387,12 @@ export class SearchQueryBuilder {
    * When enabled, the search will also include all evolution stages of the
    * specified Pokemon. For example, searching for "Squirtle" with includeEvolutions
    * will also return Wartortle and Blastoise cards.
-   * Only works when pokemonName filter is also set.
+   * Only works when character filter is also set.
    */
   public includeEvolutions(include: boolean): this {
-    this.filters.includeEvolutions = include ? 'true' : 'false';
+    if (this.filters.brand === 'pokemon') {
+      this.filters.includeEvolutions = include ? 'true' : 'false';
+    }
     return this;
   }
 

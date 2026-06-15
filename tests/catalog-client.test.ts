@@ -446,23 +446,24 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('platform=nintendo_switch');
   });
 
-  test('should support pokemonName filter', async () => {
+  test('should support character filter', async () => {
     await client.search()
-      .pokemonName('Pikachu')
+      .character('Pikachu')
       .execute();
 
     const url = mockFetch.mock.calls[0][0] as string;
-    expect(url).toContain('pokemonName=Pikachu');
+    expect(url).toContain('character=Pikachu');
   });
 
-  test('should support pokemonName with include evolutions filter', async () => {
+  test('should support character with include evolutions filter', async () => {
     await client.search()
-      .pokemonName('Pikachu')
+      .brand('pokemon')
+      .character('Pikachu')
       .includeEvolutions(true)
       .execute();
 
     const url = mockFetch.mock.calls[0][0] as string;
-    expect(url).toContain('pokemonName=Pikachu&includeEvolutions=true');
+    expect(url).toContain('brand=pokemon&character=Pikachu&includeEvolutions=true');
   });
 
   test('should support types filter', async () => {

@@ -37,9 +37,9 @@ describe('Query builder', () => {
     expect(query.params).toEqual([{ key: 'language', value: 'en' }]);
   });
 
-  test('should chain pokemonName method', () => {
-    const query = Query.create().pokemonName('Pikachu');
-    expect(query.params).toEqual([{ key: 'pokemon', value: 'Pikachu' }]);
+  test('should chain character method', () => {
+    const query = Query.create().character('Pikachu');
+    expect(query.params).toEqual([{ key: 'character', value: 'Pikachu' }]);
   });
 
   test('should chain setName method', () => {
