@@ -4,7 +4,7 @@
 export type Category = 'tcg' | 'video_game' | 'video_game_consoles';
 
 /** Supported TCG brands */
-export type TcgBrand = 'pokemon' | 'yugioh' | 'one_piece';
+export type TcgBrand = 'pokemon' | 'yugioh' | 'one_piece' | 'riftbound';
 
 /** Supported TCG product types */
 export type TcgProductType = 'card' | 'sealed_product';
@@ -54,7 +54,7 @@ export enum Context {
 // ============ SOURCE ============
 
 export interface Source {
-  provider: 'tcgdex' | 'igdb' | 'manual' | 'csv' | 'other';
+  provider: 'tcgdex' | 'riftcodex' | 'igdb' | 'manual' | 'csv' | 'other';
   externalId?: string;
   lastSyncedAt?: string;
 }
@@ -71,6 +71,7 @@ export interface SharedTcgCardDetails {
   language: string;
   firstEdition?: boolean;
   illustrator?: string;
+  character?: string[];
 }
 
 export interface SharedTcgSealedDetails {
@@ -98,7 +99,6 @@ export interface PokemonCardDetails extends SharedTcgCardDetails {
   cardType: 'energy' | 'trainer' | 'pokemon';
   variants_detailed?: PokemonCardVariant[];
   category: string;
-  pokemon?: string[];
   pokedex?: number[];
   illustrator?: string;
   hp?: number;
@@ -126,7 +126,6 @@ export interface YugiohSealedDetails extends SharedTcgSealedDetails {
 }
 
 export interface OnePieceCardDetails extends SharedTcgCardDetails {
-  character?: string;
   type?: string;
   cost?: number;
   power?: number;
@@ -136,10 +135,56 @@ export interface OnePieceSealedDetails extends SharedTcgSealedDetails {
   variant?: string;
 }
 
+// ============ RIFTBOUND DETAILS ============
+
+export type RiftboundCardType = 'Battlefield' | 'Gear' | 'Legend' | 'Rune' | 'Spell' | 'Unit';
+export type RiftboundCardSuperType = 'Basic' | 'Champion' | 'Signature' | 'Token';
+export type RiftboundCardDomain = 'Body' | 'Calm' | 'Chaos' | 'Colorless' | 'Fury' | 'Mind' | 'Order';
+export type RiftboundCardRarity = 'Common' | 'Epic' | 'Promo' | 'Rare' | 'Showcase' | 'Uncommon';
+
+export interface RiftboundCardVariant {
+  alternateArt: boolean;
+  overnumbered: boolean;
+  signature: boolean;
+  thirdParty?: {
+    tcgplayer?: number;
+  };
+}
+
+export interface RiftboundCardDetails extends SharedTcgCardDetails {
+  riftboundId: string;
+  setCardNumber: number;
+  attributes?: {
+    energy?: number | null;
+    might?: number | null;
+    power?: number | null;
+  };
+  classification?: {
+    type: RiftboundCardType;
+    supertype?: RiftboundCardSuperType;
+    rarity: RiftboundCardRarity;
+    domain: RiftboundCardDomain[];
+  };
+  text?: {
+    rich?: string;
+    plain?: string;
+    flavour?: string | null;
+  };
+  tags?: string[];
+  orientation?: string;
+  variants_detailed?: RiftboundCardVariant[];
+  releaseDate?: string;
+}
+
+export interface RiftboundSealedDetails extends SharedTcgSealedDetails {
+  variant?: string;
+}
+
 export type PokemonDetails = PokemonCardDetails | PokemonSealedDetails;
 export type YugiohDetails = YugiohCardDetails | YugiohSealedDetails;
 export type OnePieceDetails = OnePieceCardDetails | OnePieceSealedDetails;
-export type TcgDetails = PokemonDetails | YugiohDetails | OnePieceDetails;
+export type RiftboundDetails = RiftboundCardDetails | RiftboundSealedDetails;
+export type TcgDetails = PokemonDetails | YugiohDetails | OnePieceDetails | RiftboundDetails;
 
 // ============ VIDEO GAME & CONSOLE DETAILS ============
 
@@ -171,6 +216,7 @@ export interface ImageUrls {
 
 export interface BaseCatalogItem {
   _id: string;
+  publicId: string;
   title: string;
   normalizedTitle: string;
   slug: string;
@@ -206,6 +252,13 @@ export interface OnePieceCatalogItem extends BaseCatalogItem {
   details: OnePieceDetails;
 }
 
+export interface RiftboundCatalogItem extends BaseCatalogItem {
+  category: 'tcg';
+  brand: 'riftbound';
+  productType: TcgProductType;
+  details: RiftboundDetails;
+}
+
 export interface VideoGameCatalogItem extends BaseCatalogItem {
   category: 'video_game';
   platform: string;
@@ -222,6 +275,7 @@ export type CatalogItem =
   | PokemonCatalogItem
   | YugiohCatalogItem
   | OnePieceCatalogItem
+  | RiftboundCatalogItem
   | VideoGameCatalogItem
   | ConsoleCatalogItem;
 
@@ -284,6 +338,10 @@ export function isOnePieceCatalogItem(item: CatalogItem): item is OnePieceCatalo
   return item.category === 'tcg' && 'brand' in item && item.brand === 'one_piece';
 }
 
+export function isRiftboundCatalogItem(item: CatalogItem): item is RiftboundCatalogItem {
+  return item.category === 'tcg' && 'brand' in item && item.brand === 'riftbound';
+}
+
 export function isVideoGameCatalogItem(item: CatalogItem): item is VideoGameCatalogItem {
   return item.category === 'video_game';
 }
@@ -292,6 +350,6 @@ export function isConsoleCatalogItem(item: CatalogItem): item is ConsoleCatalogI
   return item.category === 'video_game_consoles';
 }
 
-export function isTcgCatalogItem(item: CatalogItem): item is PokemonCatalogItem | YugiohCatalogItem | OnePieceCatalogItem {
+export function isTcgCatalogItem(item: CatalogItem): item is PokemonCatalogItem | YugiohCatalogItem | OnePieceCatalogItem | RiftboundCatalogItem {
   return item.category === 'tcg';
 }

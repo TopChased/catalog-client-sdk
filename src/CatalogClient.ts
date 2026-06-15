@@ -383,6 +383,12 @@ export class SearchQueryBuilder {
     return this;
   }
 
+  /** Filter by character name from franchise (filters the character field on RiftboundCardDetails) */
+  public character(character: string): this {
+    this.filters.character = character;
+    return this;
+  }
+
   /**
    * When enabled, the search will also include all evolution stages of the
    * specified Pokemon. For example, searching for "Squirtle" with includeEvolutions

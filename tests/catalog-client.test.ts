@@ -392,6 +392,24 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('brand=pokemon%2Cyugioh');
   });
 
+  test('should support riftbound brand filter', async () => {
+    await client.search()
+      .brand('riftbound')
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('brand=riftbound');
+  });
+
+  test('should support character filter', async () => {
+    await client.search()
+      .character('lux')
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('character=lux');
+  });
+
   test('should support language as array (comma-separated)', async () => {
     await client.search()
       .language(['en', 'ja'])

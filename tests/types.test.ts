@@ -4,6 +4,7 @@ import {
   isPokemonCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
+  isRiftboundCatalogItem,
   isVideoGameCatalogItem,
   isConsoleCatalogItem,
   isTcgCatalogItem,
@@ -147,6 +148,35 @@ describe('type guards', () => {
     updatedAt: '2024-01-01',
   } satisfies CatalogItem;
 
+  const riftboundCard = {
+    _id: '6',
+    title: 'Ahri 009/221',
+    normalizedTitle: 'ahri 009 221',
+    slug: 'card-riftbound-opp-009-221-ahri',
+    category: 'tcg' as const,
+    brand: 'riftbound' as const,
+    productType: 'card' as const,
+    details: {
+      riftboundId: 'opp-009-221',
+      setName: 'Opposition',
+      setCode: 'opp',
+      cardNumber: 'opp-009-221',
+      setOfficialCards: '221',
+      setCardNumber: 9,
+      rarity: 'Rare',
+      language: 'en',
+      classification: {
+        type: 'Unit' as const,
+        rarity: 'Rare' as const,
+        domain: ['Fury'] as const,
+      },
+    },
+    searchText: ['ahri 009 221'],
+    source: { provider: 'riftcodex' as const },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+  } satisfies CatalogItem;
+
   test('isPokemonCatalogItem should return true for pokemon items', () => {
     expect(isPokemonCatalogItem(pokemonCard)).toBe(true);
   });
@@ -174,6 +204,15 @@ describe('type guards', () => {
     expect(isOnePieceCatalogItem(videoGame)).toBe(false);
   });
 
+  test('isRiftboundCatalogItem should return true for riftbound items', () => {
+    expect(isRiftboundCatalogItem(riftboundCard)).toBe(true);
+  });
+
+  test('isRiftboundCatalogItem should return false for non-riftbound items', () => {
+    expect(isRiftboundCatalogItem(pokemonCard)).toBe(false);
+    expect(isRiftboundCatalogItem(videoGame)).toBe(false);
+  });
+
   test('isVideoGameCatalogItem should return true for video game items', () => {
     expect(isVideoGameCatalogItem(videoGame)).toBe(true);
   });
@@ -196,6 +235,7 @@ describe('type guards', () => {
     expect(isTcgCatalogItem(pokemonCard)).toBe(true);
     expect(isTcgCatalogItem(yugiohCard)).toBe(true);
     expect(isTcgCatalogItem(onePieceCard)).toBe(true);
+    expect(isTcgCatalogItem(riftboundCard)).toBe(true);
   });
 
   test('isTcgCatalogItem should return false for non-TCG items', () => {
