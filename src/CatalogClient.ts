@@ -383,6 +383,12 @@ export class SearchQueryBuilder {
     return this;
   }
 
+  /** Filter by Pokemon TCG series (e.g. "sv", "me") - accepts single or multiple (comma-separated). Prefix with - or ! to exclude. */
+  public series(series: string | string[]): this {
+    this.filters.series = Array.isArray(series) ? series.join(',') : series;
+    return this;
+  }
+
   /**
    * When enabled, the search will also include all evolution stages of the
    * specified Pokemon. For example, searching for "Squirtle" with includeEvolutions

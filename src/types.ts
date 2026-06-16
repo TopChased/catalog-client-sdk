@@ -40,7 +40,7 @@ export const SUPPORTED_LANGUAGE_CODES = [
 export type SupportedLanguageCode = typeof SUPPORTED_LANGUAGE_CODES[number];
 
 /** Sort options for search results */
-export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity';
+export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity' | 'releaseDate';
 
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
@@ -65,12 +65,14 @@ export interface SharedTcgCardDetails {
   setName: string;
   setCode: string;
   cardNumber: string;
+  cardSetNumber: number;
   setOfficialCards: string;
   rarity: string;
-  finish?: 'regular' | 'holo' | 'metal' | 'textured';
+  finish?: string;
   language: string;
   firstEdition?: boolean;
   illustrator?: string;
+  releaseDate?: string;
   character?: string[];
 }
 
@@ -96,10 +98,13 @@ export interface PokemonCardVariant {
 }
 
 export interface PokemonCardDetails extends SharedTcgCardDetails {
+  series: string;
+  cardSetNumber: number;
   cardType: 'energy' | 'trainer' | 'pokemon';
   variants_detailed?: PokemonCardVariant[];
   category: string;
   pokedex?: number[];
+  pokedexSort?: number;
   illustrator?: string;
   hp?: number;
   energyType?: string; // Fire, Water, etc.
@@ -288,9 +293,15 @@ export interface CatalogSearchFilters {
   productType?: TcgProductType;
   platform?: string;
   language?: string;
+  character?: string;
+  series?: string;
   setName?: string;
   setCode?: string;
   illustrator?: string;
+  cardType?: string;
+  energyType?: string;
+  rarity?: string;
+  includeEvolutions?: string;
   limit?: number;
   offset?: number;
   sortBy?: SortBy;

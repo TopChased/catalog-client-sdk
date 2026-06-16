@@ -410,6 +410,24 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('character=lux');
   });
 
+  test('should support series filter', async () => {
+    await client.search()
+      .series('sv')
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('series=sv');
+  });
+
+  test('should support series filter with multiple values', async () => {
+    await client.search()
+      .series(['sv', 'me'])
+      .execute();
+
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).toContain('series=sv%2Cme');
+  });
+
   test('should support language as array (comma-separated)', async () => {
     await client.search()
       .language(['en', 'ja'])
@@ -658,6 +676,26 @@ describe('SearchQueryBuilder', () => {
 
       const url = mockFetch.mock.calls[0][0] as string;
       expect(url).toContain('sortBy=relevance');
+      expect(url).toContain('sortOrder=desc');
+    });
+
+    test('should sort by releaseDate asc', async () => {
+      await client.search()
+        .sort('releaseDate', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=releaseDate');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should sort by releaseDate desc', async () => {
+      await client.search()
+        .sort('releaseDate', 'desc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('sortBy=releaseDate');
       expect(url).toContain('sortOrder=desc');
     });
   });
