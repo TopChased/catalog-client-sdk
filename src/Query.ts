@@ -66,10 +66,10 @@ export default class Query {
   }
 
   /**
-   * Filter by Pokemon name (filters the pokemon field on PokemonCardDetails)
+   * Filter by character name (filters character on TCGCardDetails)
    */
-  public pokemonName(name: string): this {
-    this.params.push({ key: 'pokemon', value: name });
+  public character(name: string): this {
+    this.params.push({ key: 'character', value: name });
     return this;
   }
 

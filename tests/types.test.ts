@@ -4,11 +4,12 @@ import {
   isPokemonCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
+  isRiftboundCatalogItem,
   isVideoGameCatalogItem,
   isConsoleCatalogItem,
   isTcgCatalogItem,
 } from '../src/types';
-import type { CatalogItem } from '../src/types';
+import type { CatalogItem, ConsoleCatalogItem, ConsoleDetails, OnePieceCardDetails, OnePieceCatalogItem, PokemonCardDetails, PokemonCatalogItem, RiftboundCardDetails, RiftboundCatalogItem, VideoGameDetails, YugiohCardDetails, YugiohCatalogItem } from '../src/types';
 
 describe('SUPPORTED_LANGUAGE_CODES', () => {
   test('should contain all expected language codes', () => {
@@ -45,6 +46,7 @@ describe('SUPPORTED_LANGUAGE_CODES', () => {
 describe('type guards', () => {
   const pokemonCard = {
     _id: '1',
+    publicId: 'pokemon-base1-4-en',
     title: 'Charizard',
     normalizedTitle: 'charizard',
     slug: 'charizard',
@@ -60,15 +62,16 @@ describe('type guards', () => {
       language: 'en',
       cardType: 'pokemon' as const,
       category: 'pokemon',
-    },
+    } satisfies PokemonCardDetails,
     searchText: ['charizard'],
     source: { provider: 'tcgdex' as const },
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
-  } satisfies CatalogItem;
+  } satisfies PokemonCatalogItem;
 
   const yugiohCard = {
     _id: '2',
+    publicId: 'yugioh-lob-1-100-en',
     title: 'Dark Magician',
     normalizedTitle: 'dark magician',
     slug: 'dark-magician',
@@ -88,10 +91,11 @@ describe('type guards', () => {
     source: { provider: 'tcgdex' as const },
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
-  } satisfies CatalogItem;
+  } satisfies YugiohCatalogItem;
 
   const onePieceCard = {
     _id: '3',
+    publicId: 'op-op01-1-100-en',
     title: 'Monkey D. Luffy',
     normalizedTitle: 'monkey d luffy',
     slug: 'monkey-d-luffy',
@@ -105,15 +109,16 @@ describe('type guards', () => {
       setOfficialCards: '100',
       rarity: 'Common',
       language: 'en',
-    },
+    } satisfies OnePieceCardDetails,
     searchText: ['monkey d luffy'],
     source: { provider: 'tcgdex' as const },
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
-  } satisfies CatalogItem;
+  } satisfies OnePieceCatalogItem;
 
   const videoGame = {
     _id: '4',
+    publicId: 'videogame-pokemon-scarlet-nintendo-usa',
     title: 'Pokemon Scarlet',
     normalizedTitle: 'pokemon scarlet',
     slug: 'pokemon-scarlet',
@@ -123,7 +128,7 @@ describe('type guards', () => {
       publisher: 'Nintendo',
       developer: 'Game Freak',
       genre: ['RPG'],
-    },
+    } satisfies VideoGameDetails,
     searchText: ['pokemon scarlet'],
     source: { provider: 'igdb' as const },
     createdAt: '2024-01-01',
@@ -132,6 +137,7 @@ describe('type guards', () => {
 
   const console = {
     _id: '5',
+    publicId: 'console-switch1-usa',
     title: 'Nintendo Switch',
     normalizedTitle: 'nintendo switch',
     slug: 'nintendo-switch',
@@ -140,12 +146,42 @@ describe('type guards', () => {
     details: {
       manufacturer: 'Nintendo',
       model: 'OLED',
-    },
+    } satisfies ConsoleDetails,
     searchText: ['nintendo switch'],
     source: { provider: 'manual' as const },
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
-  } satisfies CatalogItem;
+  } satisfies ConsoleCatalogItem;
+
+  const riftboundCard = {
+    _id: '6',
+    publicId: 'tcg-riftbound-opp-009-221-en',
+    title: 'Ahri 009/221',
+    normalizedTitle: 'ahri 009 221',
+    slug: 'card-riftbound-opp-009-221-ahri',
+    category: 'tcg' as const,
+    brand: 'riftbound' as const,
+    productType: 'card' as const,
+    details: {
+      riftboundId: 'opp-009-221',
+      setName: 'Opposition',
+      setCode: 'opp',
+      cardNumber: 'opp-009-221',
+      setOfficialCards: '221',
+      setCardNumber: 9,
+      rarity: 'Rare',
+      language: 'en',
+      classification: {
+        type: 'Unit' as const,
+        rarity: 'Rare' as const,
+        domain: ['Fury'] as const,
+      },
+    } satisfies RiftboundCardDetails,
+    searchText: ['ahri 009 221'],
+    source: { provider: 'riftcodex' as const },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+  } satisfies RiftboundCatalogItem;
 
   test('isPokemonCatalogItem should return true for pokemon items', () => {
     expect(isPokemonCatalogItem(pokemonCard)).toBe(true);
@@ -174,6 +210,15 @@ describe('type guards', () => {
     expect(isOnePieceCatalogItem(videoGame)).toBe(false);
   });
 
+  test('isRiftboundCatalogItem should return true for riftbound items', () => {
+    expect(isRiftboundCatalogItem(riftboundCard)).toBe(true);
+  });
+
+  test('isRiftboundCatalogItem should return false for non-riftbound items', () => {
+    expect(isRiftboundCatalogItem(pokemonCard)).toBe(false);
+    expect(isRiftboundCatalogItem(videoGame)).toBe(false);
+  });
+
   test('isVideoGameCatalogItem should return true for video game items', () => {
     expect(isVideoGameCatalogItem(videoGame)).toBe(true);
   });
@@ -196,6 +241,7 @@ describe('type guards', () => {
     expect(isTcgCatalogItem(pokemonCard)).toBe(true);
     expect(isTcgCatalogItem(yugiohCard)).toBe(true);
     expect(isTcgCatalogItem(onePieceCard)).toBe(true);
+    expect(isTcgCatalogItem(riftboundCard)).toBe(true);
   });
 
   test('isTcgCatalogItem should return false for non-TCG items', () => {
