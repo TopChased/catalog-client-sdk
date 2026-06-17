@@ -8,9 +8,11 @@ Enter your story list of changes here
 (Add additional repos as needed)
 | Other Affected Repositories | PR Link |
 | -------- | -------- |
+|  https://github.com/TopChased/main-app  | ADD LINK   |
+|  https://github.com/TopChased/catalog-client-sdk  | ADD LINK   |
 |  https://github.com/TopChased/catalog-search-demo  | ADD LINK   |
 |  https://github.com/TopChased/catalog-engine | ADD LINK   |
-|  https://github.com/TopChased/catalog-client  | ADD LINK   |
+|  https://github.com/TopChased/tools | ADD LINK   |
 
 (Update the template to match your story details)
 ### Checklist:
