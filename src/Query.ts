@@ -74,6 +74,14 @@ export default class Query {
   }
 
   /**
+   * Filter by Pokemon TCG series (e.g. "sv", "me"). Prefix with - or ! to exclude.
+   */
+  public series(series: string): this {
+    this.params.push({ key: 'series', value: series });
+    return this;
+  }
+
+  /**
    * Filter by card language
    */
   public language(language: string): this {

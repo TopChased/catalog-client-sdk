@@ -42,6 +42,11 @@ describe('Query builder', () => {
     expect(query.params).toEqual([{ key: 'character', value: 'Pikachu' }]);
   });
 
+  test('should chain series method', () => {
+    const query = Query.create().series('sv');
+    expect(query.params).toEqual([{ key: 'series', value: 'sv' }]);
+  });
+
   test('should chain setName method', () => {
     const query = Query.create().setName('Base Set');
     expect(query.params).toEqual([{ key: 'setName', value: 'Base Set' }]);
