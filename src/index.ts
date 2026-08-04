@@ -13,6 +13,8 @@ export type {
   Source,
   SharedTcgCardDetails,
   SharedTcgSealedDetails,
+  TcgPlayerSku,
+  TcgPlayerThirdParty,
   PokemonCardVariant,
   PokemonCardDetails,
   PokemonSealedDetails,

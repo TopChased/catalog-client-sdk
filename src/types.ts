@@ -84,6 +84,17 @@ export interface SharedTcgSealedDetails {
   upcSerial?: number;
 }
 
+export interface TcgPlayerSku {
+  skuId: number;
+  condition: 'NM' | 'LP' | 'MP' | 'HP' | 'DMG';
+  variant: string;
+}
+
+export interface TcgPlayerThirdParty {
+  id: number;
+  skus: TcgPlayerSku[];
+}
+
 export interface PokemonCardVariant {
   type: string;
   subtype?: string;
@@ -92,7 +103,7 @@ export interface PokemonCardVariant {
   foil?: string;
   thirdParty?: {
     cardmarket?: number;
-    tcgplayer?: number;
+    tcgplayer?: TcgPlayerThirdParty;
   };
   variantId?: string;
 }
@@ -219,6 +230,12 @@ export interface ImageUrls {
   low?: string;
 }
 
+/** Denormalized market price snapshot (NM market price for cards). */
+export interface PriceSnapshot {
+  marketPrice: string | null;
+  priceUnits: 'USD';
+}
+
 export interface BaseCatalogItem {
   _id: string;
   publicId: string;
@@ -232,7 +249,9 @@ export interface BaseCatalogItem {
   createdAt: string;
   updatedAt: string;
   localizedTitles?: Record<string, string>;
+  price?: PriceSnapshot;
 }
+
 
 // ============ BRAND-SPECIFIC CATALOG ITEMS ============
 
