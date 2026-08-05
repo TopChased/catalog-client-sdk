@@ -48,7 +48,10 @@ export type {
   CatalogSearchResponse,
   AutocompleteSuggestion,
   AutocompleteResponse,
+  PriceSnapshot,
+  VariantPriceSnapshot,
 } from './types';
+
 
 export type {
   Illustrator,

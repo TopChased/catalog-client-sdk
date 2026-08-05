@@ -40,7 +40,8 @@ export const SUPPORTED_LANGUAGE_CODES = [
 export type SupportedLanguageCode = typeof SUPPORTED_LANGUAGE_CODES[number];
 
 /** Sort options for search results */
-export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity' | 'releaseDate';
+export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'pokedex' | 'illustrator' | 'rarity' | 'releaseDate' | 'price';
+
 
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
@@ -231,10 +232,22 @@ export interface ImageUrls {
 }
 
 /** Denormalized market price snapshot (NM market price for cards). */
-export interface PriceSnapshot {
+/** A per-variant market price snapshot, keyed by the composite variant key. */
+export interface VariantPriceSnapshot {
+  variantKey: string;
   marketPrice: string | null;
-  priceUnits: 'USD';
+  condition: string;
 }
+
+export interface PriceSnapshot {
+  priceUnits: 'USD';
+  // The card's "from"/entry market price = the min of the variant market prices.
+  // Stored as a number so it can be indexed and sorted on (asc/desc) efficiently.
+  marketPrice?: number | null;
+  variants?: VariantPriceSnapshot[];
+}
+
+
 
 export interface BaseCatalogItem {
   _id: string;
