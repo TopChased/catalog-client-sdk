@@ -235,9 +235,10 @@ export interface ImageUrls {
 /** A per-variant market price snapshot, keyed by the composite variant key. */
 export interface VariantPriceSnapshot {
   variantKey: string;
-  marketPrice: string | null;
+  marketPrice: number | null;
   condition: string;
 }
+
 
 export interface PriceSnapshot {
   priceUnits: 'USD';
