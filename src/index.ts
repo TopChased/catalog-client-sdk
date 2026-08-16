@@ -46,6 +46,9 @@ export type {
   CatalogItem,
   CatalogSearchFilters,
   CatalogSearchResponse,
+  CatalogSearchItem,
+  CatalogView,
+  CatalogVariantSearchItem,
   AutocompleteSuggestion,
   AutocompleteResponse,
   PriceSnapshot,
@@ -68,6 +71,7 @@ export {
   isVideoGameCatalogItem,
   isConsoleCatalogItem,
   isTcgCatalogItem,
+  isCatalogVariantSearchItem,
 } from './types';
 
 // Export utilities

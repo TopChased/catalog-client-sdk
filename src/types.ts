@@ -46,6 +46,14 @@ export type SortBy = 'relevance' | 'title' | 'createdAt' | 'cardNumber' | 'poked
 /** Sort order */
 export type SortOrder = 'asc' | 'desc';
 
+/**
+ * Catalog read mode. 'stacked' queries the canonical catalog_products and
+ * returns one item per card (sorted by the card's min market price). 'split'
+ * queries the disposable catalog_variants projection and returns one row per
+ * variant, sorted/paginated server-side by that variant's own price.
+ */
+export type CatalogView = 'stacked' | 'split';
+
 /** Context **/
 export enum Context {
   Browser = 'browser',
@@ -335,14 +343,51 @@ export interface CatalogSearchFilters {
   energyType?: string;
   rarity?: string;
   includeEvolutions?: string;
+  /** Read mode: 'stacked' (one item per card) or 'split' (one row per variant). */
+  view?: CatalogView;
   limit?: number;
   offset?: number;
   sortBy?: SortBy;
   sortOrder?: SortOrder;
 }
 
+/**
+ * A single variant row returned by the catalog API when `view=split`.
+ * Mirrors the server's CatalogVariant projection DTO. It is a derived,
+ * disposable read model — its identity is always `catalogItemId + variantKey`,
+ * never a catalogVariant _id.
+ */
+export interface CatalogVariantSearchItem {
+  catalogItemId: string;
+  catalogPublicId: string;
+  publicId: string;
+  title: string;
+  variantKey: string;
+  variantLabel: string;
+  /** Convenience display name, e.g. "Charizard 4/102 · Holo". */
+  variantName: string;
+  slug: string;
+  category: Category;
+  brand?: TcgBrand;
+  productType?: TcgProductType;
+  imageUrl?: ImageUrls;
+  language?: string;
+  setId?: string;
+  setCode?: string;
+  setName?: string;
+  cardType?: string;
+  rarity?: string;
+  pricing?: {
+    marketPrice?: number | null;
+    condition?: string;
+  };
+}
+
+/** A search result is either a full catalog item (stacked) or a variant row (split). */
+export type CatalogSearchItem = CatalogItem | CatalogVariantSearchItem;
+
 export interface CatalogSearchResponse {
-  items: CatalogItem[];
+  items: CatalogSearchItem[];
   total: number;
   page: number;
   limit: number;
@@ -396,4 +441,13 @@ export function isConsoleCatalogItem(item: CatalogItem): item is ConsoleCatalogI
 
 export function isTcgCatalogItem(item: CatalogItem): item is PokemonCatalogItem | YugiohCatalogItem | OnePieceCatalogItem | RiftboundCatalogItem {
   return item.category === 'tcg';
+}
+
+/**
+ * Narrow a search result to a split-view variant row. Split rows come from the
+ * derived catalog_variants projection and carry a `variantKey`/`variantLabel`
+ * plus their own `pricing` (unlike full CatalogItems which nest variants).
+ */
+export function isCatalogVariantSearchItem(item: CatalogSearchItem): item is CatalogVariantSearchItem {
+  return (item as CatalogVariantSearchItem).variantKey !== undefined;
 }

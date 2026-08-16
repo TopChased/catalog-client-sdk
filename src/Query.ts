@@ -150,4 +150,13 @@ export default class Query {
     );
     return this;
   }
+
+  /**
+   * Set the catalog read mode: 'stacked' (one item per card) or 'split'
+   * (one row per variant, sorted & paginated server-side by variant price).
+   */
+  public view(view: 'stacked' | 'split'): this {
+    this.params.push({ key: 'view', value: view });
+    return this;
+  }
 }

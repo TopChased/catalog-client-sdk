@@ -2,6 +2,7 @@ import { buildURL, detectContext } from './utils';
 import {
   type CatalogItem,
   type CatalogSearchResponse,
+  type CatalogView,
   type AutocompleteResponse,
   type AutocompleteSuggestion,
   Context,
@@ -465,6 +466,17 @@ export class SearchQueryBuilder {
   public sort(field: string, order: 'asc' | 'desc'): this {
     this.filters.sortBy = field;
     this.filters.sortOrder = order;
+    return this;
+  }
+
+  /**
+   * Set the catalog read mode.
+   * - 'stacked' (default): one item per card, sorted by the card's min market price.
+   * - 'split': one row per variant, sorted & paginated server-side by each variant's
+   *   own price. Returns CatalogVariantSearchItem rows.
+   */
+  public view(view: CatalogView): this {
+    this.filters.view = view;
     return this;
   }
 
