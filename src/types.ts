@@ -377,6 +377,7 @@ export interface CatalogVariantSearchItem {
   setName?: string;
   cardType?: string;
   rarity?: string;
+  cardNumber?: string;
   pricing?: {
     marketPrice?: number | null;
     condition?: string;
@@ -427,7 +428,7 @@ export function isOnePieceCatalogItem(item: CatalogItem): item is OnePieceCatalo
   return item.category === 'tcg' && 'brand' in item && item.brand === 'one_piece';
 }
 
-export function isRiftboundCatalogItem(item: CatalogItem): item is RiftboundCatalogItem {
+export function isRiftboundCatalogItem(item: CatalogItem | CatalogVariantSearchItem): item is RiftboundCatalogItem {
   return item.category === 'tcg' && 'brand' in item && item.brand === 'riftbound';
 }
 
