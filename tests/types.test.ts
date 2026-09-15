@@ -5,11 +5,13 @@ import {
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
   isRiftboundCatalogItem,
+  isRiftboundCardCatalogItem,
+  isRiftboundSealedCatalogItem,
   isVideoGameCatalogItem,
   isConsoleCatalogItem,
   isTcgCatalogItem,
 } from '../src/types';
-import type { CatalogItem, ConsoleCatalogItem, ConsoleDetails, OnePieceCardDetails, OnePieceCatalogItem, PokemonCardDetails, PokemonCatalogItem, RiftboundCardDetails, RiftboundCatalogItem, VideoGameDetails, YugiohCardDetails, YugiohCatalogItem } from '../src/types';
+import type { CatalogItem, ConsoleCatalogItem, ConsoleDetails, OnePieceCardDetails, OnePieceCatalogItem, PokemonCardDetails, PokemonCatalogItem, RiftboundCardDetails, RiftboundCatalogItem, RiftboundSealedCatalogItem, RiftboundSealedDetails, VideoGameDetails, YugiohCardDetails, YugiohCatalogItem } from '../src/types';
 
 describe('SUPPORTED_LANGUAGE_CODES', () => {
   test('should contain all expected language codes', () => {
@@ -173,20 +175,36 @@ describe('type guards', () => {
       cardNumber: 'opp-009-221',
       cardSetNumber: 9,
       setOfficialCards: '221',
-      setCardNumber: 9,
       rarity: 'Rare',
       language: 'en',
-      classification: {
-        type: 'Unit' as const,
-        rarity: 'Rare' as const,
-        domain: ['Fury'] as const,
-      },
+      cardType: 'Unit' as const,
+      domain: ['Fury'] as const,
     } satisfies RiftboundCardDetails,
     searchText: ['ahri 009 221'],
     source: { provider: 'riftcodex' as const },
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
   } satisfies RiftboundCatalogItem;
+
+  const riftboundSealed = {
+    _id: '7',
+    publicId: 'sealed-riftbound-opp-booster-box-en',
+    title: 'Opposition Booster Box',
+    normalizedTitle: 'opposition booster box',
+    slug: 'sealed-riftbound-opp-booster-box-opposition',
+    category: 'tcg' as const,
+    brand: 'riftbound' as const,
+    productType: 'sealed_product' as const,
+    details: {
+      sealedType: 'Booster Box',
+      setName: 'Opposition',
+      setCode: 'opp',
+    } satisfies RiftboundSealedDetails,
+    searchText: ['opposition booster box'],
+    source: { provider: 'riftcodex' as const },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+  } satisfies RiftboundSealedCatalogItem;
 
   test('isPokemonCatalogItem should return true for pokemon items', () => {
     expect(isPokemonCatalogItem(pokemonCard)).toBe(true);
@@ -222,6 +240,28 @@ describe('type guards', () => {
   test('isRiftboundCatalogItem should return false for non-riftbound items', () => {
     expect(isRiftboundCatalogItem(pokemonCard)).toBe(false);
     expect(isRiftboundCatalogItem(videoGame)).toBe(false);
+  });
+
+  test('isRiftboundCardCatalogItem should return true for riftbound cards only', () => {
+    expect(isRiftboundCardCatalogItem(riftboundCard)).toBe(true);
+    expect(isRiftboundCardCatalogItem(riftboundSealed)).toBe(false);
+  });
+
+  test('isRiftboundSealedCatalogItem should return true for riftbound sealed products only', () => {
+    expect(isRiftboundSealedCatalogItem(riftboundSealed)).toBe(true);
+    expect(isRiftboundSealedCatalogItem(riftboundCard)).toBe(false);
+  });
+
+  test('isRiftboundCardCatalogItem should narrow details to card details', () => {
+    const item: CatalogItem = riftboundCard;
+
+    if (isRiftboundCardCatalogItem(item)) {
+      // Would not compile if `details` were still the card | sealed union.
+      expect(item.details.cardType).toBe('Unit');
+      expect(item.details.domain).toContain('Fury');
+    } else {
+      throw new Error('expected a riftbound card catalog item');
+    }
   });
 
   test('isVideoGameCatalogItem should return true for video game items', () => {
