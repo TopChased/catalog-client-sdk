@@ -104,16 +104,12 @@ export interface TcgPlayerThirdParty {
   skus: TcgPlayerSku[];
 }
 
-export interface PokemonCardVariant {
+export interface PokemonCardVariant extends CardVariant {
   type: string;
   subtype?: string;
   size?: 'standard' | 'jumbo';
   stamp?: string[];
   foil?: string;
-  thirdParty?: {
-    cardmarket?: number;
-    tcgplayer?: TcgPlayerThirdParty;
-  };
   variantId?: string;
 }
 
@@ -167,13 +163,18 @@ export type RiftboundCardSuperType = 'Basic' | 'Champion' | 'Signature' | 'Token
 export type RiftboundCardDomain = 'Body' | 'Calm' | 'Chaos' | 'Colorless' | 'Fury' | 'Mind' | 'Order';
 export type RiftboundCardRarity = 'Common' | 'Epic' | 'Promo' | 'Rare' | 'Showcase' | 'Uncommon';
 
-export interface RiftboundCardVariant {
+export interface CardVariant {
+  thirdParty?: {
+    cardmarket?: number;
+    tcgplayer?: TcgPlayerThirdParty;
+  };
+}
+
+export interface RiftboundCardVariant extends CardVariant {
+  // todo: add foil (need to determine source for foil such as holo and normal)
   alternateArt: boolean;
   overnumbered: boolean;
   signature: boolean;
-  thirdParty?: {
-    tcgplayer?: number;
-  };
 }
 
 export interface RiftboundCardDetails extends SharedTcgCardDetails {

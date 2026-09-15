@@ -15,6 +15,7 @@ export type {
   SharedTcgSealedDetails,
   TcgPlayerSku,
   TcgPlayerThirdParty,
+  CardVariant,
   PokemonCardVariant,
   PokemonCardDetails,
   PokemonSealedDetails,
