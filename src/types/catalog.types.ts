@@ -10,7 +10,7 @@ import type { Source } from './shared.types';
 import type { ConsoleDetails } from './gaming/console.types';
 import type { VideoGameDetails } from './gaming/videogame.types';
 import type { OnePieceDetails } from './tcg/onepiece.types';
-import type { PokemonDetails } from './tcg/pokemon.types';
+import type { PokemonCardDetails, PokemonDetails, PokemonSealedDetails } from './tcg/pokemon.types';
 import type { RiftboundCardDetails, RiftboundDetails, RiftboundSealedDetails } from './tcg/riftbound.types';
 import type { YugiohDetails } from './tcg/yugioh.types';
 
@@ -63,11 +63,11 @@ export interface BaseCatalogItem {
 
 // ============ BRAND-SPECIFIC CATALOG ITEMS ============
 
-export interface PokemonCatalogItem extends BaseCatalogItem {
+export interface PokemonCardCatalogItem extends BaseCatalogItem {
   category: 'tcg';
   brand: 'pokemon';
-  productType: TcgProductType;
-  details: PokemonDetails;
+  productType: 'card';
+  details: PokemonCardDetails;
 }
 
 export interface YugiohCatalogItem extends BaseCatalogItem {
@@ -97,6 +97,14 @@ export interface RiftboundCardCatalogItem extends BaseCatalogItem {
   details: RiftboundCardDetails;
 }
 
+/** A Pokemon sealed product (booster pack, box, bundle, …). */
+export interface PokemonSealedCatalogItem extends BaseCatalogItem {
+  category: 'tcg';
+  brand: 'pokemon';
+  productType: 'sealed_product';
+  details: PokemonSealedDetails;
+}
+
 /** A Riftbound sealed product (pack, box, bundle, …). */
 export interface RiftboundSealedCatalogItem extends BaseCatalogItem {
   category: 'tcg';
@@ -104,6 +112,14 @@ export interface RiftboundSealedCatalogItem extends BaseCatalogItem {
   productType: 'sealed_product';
   details: RiftboundSealedDetails;
 }
+
+/**
+ * @deprecated Prefer `PokemonCardCatalogItem` / `PokemonSealedCatalogItem`.
+ * This alias stays assignable to both so existing callers keep compiling, but it
+ * cannot discriminate on `details` — narrow with `isPokemonCardCatalogItem` or
+ * `isPokemonSealedCatalogItem` first.
+ */
+export type PokemonCatalogItem = PokemonCardCatalogItem | PokemonSealedCatalogItem;
 
 /**
  * @deprecated Prefer `RiftboundCardCatalogItem` / `RiftboundSealedCatalogItem`.

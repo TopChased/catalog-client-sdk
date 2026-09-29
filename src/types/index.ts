@@ -77,6 +77,8 @@ export type {
   BaseCatalogItem,
   TcgDetails,
   PokemonCatalogItem,
+  PokemonCardCatalogItem,
+  PokemonSealedCatalogItem,
   YugiohCatalogItem,
   OnePieceCatalogItem,
   RiftboundCardCatalogItem,
@@ -96,6 +98,8 @@ export type {
 // ============ TYPE GUARDS ============
 export {
   isPokemonCatalogItem,
+  isPokemonCardCatalogItem,
+  isPokemonSealedCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
   isRiftboundCatalogItem,

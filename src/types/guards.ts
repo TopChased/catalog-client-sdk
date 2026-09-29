@@ -4,7 +4,9 @@ import type {
   CatalogVariantSearchItem,
   ConsoleCatalogItem,
   OnePieceCatalogItem,
+  PokemonCardCatalogItem,
   PokemonCatalogItem,
+  PokemonSealedCatalogItem,
   RiftboundCardCatalogItem,
   RiftboundCatalogItem,
   RiftboundSealedCatalogItem,
@@ -13,6 +15,13 @@ import type {
 } from './catalog.types';
 
 // ============ TYPE GUARDS ============
+
+/*
+ * These guards operate on full catalog items (`CatalogItem`), which always carry
+ * a `details` payload. Split-view rows (`CatalogVariantSearchItem`) are a flat
+ * projection without `details` — narrow those with `isCatalogVariantSearchItem`
+ * and read the flattened fields (brand, productType, setName, …) directly.
+ */
 
 export function isPokemonCatalogItem(item: CatalogItem): item is PokemonCatalogItem {
   return item.category === 'tcg' && 'brand' in item && item.brand === 'pokemon';
@@ -26,24 +35,28 @@ export function isOnePieceCatalogItem(item: CatalogItem): item is OnePieceCatalo
   return item.category === 'tcg' && 'brand' in item && item.brand === 'one_piece';
 }
 
-export function isRiftboundCatalogItem(item: CatalogItem | CatalogVariantSearchItem): item is RiftboundCatalogItem {
+export function isRiftboundCatalogItem(item: CatalogItem): item is RiftboundCatalogItem {
   return item.category === 'tcg' && 'brand' in item && item.brand === 'riftbound';
 }
 
 /**
- * Narrow a Riftbound item to a single card. Unlike `isRiftboundCatalogItem`,
- * this also narrows `details` to `RiftboundCardDetails`.
+ * Narrow by product type. Like the brand guards above, these also narrow
+ * `details` (card vs. sealed) and therefore require a full `CatalogItem`.
  */
-export function isRiftboundCardCatalogItem(item: CatalogItem | CatalogVariantSearchItem): item is RiftboundCardCatalogItem {
+export function isRiftboundCardCatalogItem(item: CatalogItem): item is RiftboundCardCatalogItem {
   return isRiftboundCatalogItem(item) && item.productType === 'card';
 }
 
-/**
- * Narrow a Riftbound item to a sealed product (pack, box, bundle, …), which
- * narrows `details` to `RiftboundSealedDetails`.
- */
-export function isRiftboundSealedCatalogItem(item: CatalogItem | CatalogVariantSearchItem): item is RiftboundSealedCatalogItem {
+export function isRiftboundSealedCatalogItem(item: CatalogItem): item is RiftboundSealedCatalogItem {
   return isRiftboundCatalogItem(item) && item.productType === 'sealed_product';
+}
+
+export function isPokemonCardCatalogItem(item: CatalogItem): item is PokemonCardCatalogItem {
+  return isPokemonCatalogItem(item) && item.productType === 'card';
+}
+
+export function isPokemonSealedCatalogItem(item: CatalogItem): item is PokemonSealedCatalogItem {
+  return isPokemonCatalogItem(item) && item.productType === 'sealed_product';
 }
 
 export function isVideoGameCatalogItem(item: CatalogItem): item is VideoGameCatalogItem {
@@ -54,7 +67,7 @@ export function isConsoleCatalogItem(item: CatalogItem): item is ConsoleCatalogI
   return item.category === 'video_game_consoles';
 }
 
-export function isTcgCatalogItem(item: CatalogItem): item is PokemonCatalogItem | YugiohCatalogItem | OnePieceCatalogItem | RiftboundCatalogItem {
+export function isTcgCatalogItem(item: CatalogItem): item is PokemonCardCatalogItem | PokemonSealedCatalogItem | RiftboundCardCatalogItem | YugiohCatalogItem | OnePieceCatalogItem {
   return item.category === 'tcg';
 }
 

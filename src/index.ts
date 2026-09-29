@@ -39,6 +39,8 @@ export type {
   ConsoleDetails,
   BaseCatalogItem,
   PokemonCatalogItem,
+  PokemonCardCatalogItem,
+  PokemonSealedCatalogItem,
   YugiohCatalogItem,
   OnePieceCatalogItem,
   RiftboundCardCatalogItem,
@@ -68,6 +70,8 @@ export type {
 export {
   SUPPORTED_LANGUAGE_CODES,
   isPokemonCatalogItem,
+  isPokemonCardCatalogItem,
+  isPokemonSealedCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
   isRiftboundCatalogItem,

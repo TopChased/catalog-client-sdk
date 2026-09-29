@@ -1,7 +1,10 @@
 import { describe, test, expect } from '@jest/globals';
 import {
   SUPPORTED_LANGUAGE_CODES,
+  isCatalogVariantSearchItem,
   isPokemonCatalogItem,
+  isPokemonCardCatalogItem,
+  isPokemonSealedCatalogItem,
   isYugiohCatalogItem,
   isOnePieceCatalogItem,
   isRiftboundCatalogItem,
@@ -11,7 +14,7 @@ import {
   isConsoleCatalogItem,
   isTcgCatalogItem,
 } from '../src/types';
-import type { CatalogItem, ConsoleCatalogItem, ConsoleDetails, OnePieceCardDetails, OnePieceCatalogItem, PokemonCardDetails, PokemonCatalogItem, RiftboundCardDetails, RiftboundCatalogItem, RiftboundSealedCatalogItem, RiftboundSealedDetails, VideoGameDetails, YugiohCardDetails, YugiohCatalogItem } from '../src/types';
+import type { CatalogItem, CatalogVariantSearchItem, ConsoleCatalogItem, ConsoleDetails, OnePieceCardDetails, OnePieceCatalogItem, PokemonCardCatalogItem, PokemonCardDetails, PokemonCatalogItem, PokemonSealedCatalogItem, PokemonSealedDetails, RiftboundCardDetails, RiftboundCatalogItem, RiftboundSealedCatalogItem, RiftboundSealedDetails, VideoGameDetails, YugiohCardDetails, YugiohCatalogItem } from '../src/types';
 
 describe('SUPPORTED_LANGUAGE_CODES', () => {
   test('should contain all expected language codes', () => {
@@ -206,6 +209,28 @@ describe('type guards', () => {
     updatedAt: '2024-01-01',
   } satisfies RiftboundSealedCatalogItem;
 
+  const pokemonSealed = {
+    _id: '8',
+    publicId: 'sealed-pokemon-base1-booster-box-en',
+    title: 'Base Set Booster Box',
+    normalizedTitle: 'base set booster box',
+    slug: 'sealed-pokemon-base1-booster-box',
+    category: 'tcg' as const,
+    brand: 'pokemon' as const,
+    productType: 'sealed_product' as const,
+    details: {
+      sealedType: 'Booster Box',
+      setName: 'Base Set',
+      setCode: 'base1',
+    } satisfies PokemonSealedDetails,
+    searchText: ['base set booster box'],
+    source: { provider: 'tcgdex' as const },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+  } satisfies PokemonSealedCatalogItem;
+
+  const pokemonCardOnly = pokemonCard as PokemonCardCatalogItem;
+
   test('isPokemonCatalogItem should return true for pokemon items', () => {
     expect(isPokemonCatalogItem(pokemonCard)).toBe(true);
   });
@@ -213,6 +238,40 @@ describe('type guards', () => {
   test('isPokemonCatalogItem should return false for non-pokemon items', () => {
     expect(isPokemonCatalogItem(yugiohCard)).toBe(false);
     expect(isPokemonCatalogItem(videoGame)).toBe(false);
+  });
+
+  test('isPokemonCardCatalogItem should return true for pokemon cards only', () => {
+    expect(isPokemonCardCatalogItem(pokemonCard)).toBe(true);
+    expect(isPokemonCardCatalogItem(pokemonSealed)).toBe(false);
+    expect(isPokemonCardCatalogItem(yugiohCard)).toBe(false);
+  });
+
+  test('isPokemonSealedCatalogItem should return true for pokemon sealed products only', () => {
+    expect(isPokemonSealedCatalogItem(pokemonSealed)).toBe(true);
+    expect(isPokemonSealedCatalogItem(pokemonCard)).toBe(false);
+    expect(isPokemonSealedCatalogItem(riftboundSealed)).toBe(false);
+  });
+
+  test('isPokemonCardCatalogItem should narrow details to pokemon card details', () => {
+    const item: CatalogItem = pokemonCardOnly;
+
+    if (isPokemonCardCatalogItem(item)) {
+      // Would not compile if `details` were the sealed/riftbound shape.
+      expect(item.details.series).toBe('base');
+      expect(item.details.cardType).toBe('pokemon');
+    } else {
+      throw new Error('expected a pokemon card catalog item');
+    }
+  });
+
+  test('isPokemonSealedCatalogItem should narrow details to pokemon sealed details', () => {
+    const item: CatalogItem = pokemonSealed;
+
+    if (isPokemonSealedCatalogItem(item)) {
+      expect(item.details.sealedType).toBe('Booster Box');
+    } else {
+      throw new Error('expected a pokemon sealed catalog item');
+    }
   });
 
   test('isYugiohCatalogItem should return true for yugioh items', () => {
@@ -292,5 +351,30 @@ describe('type guards', () => {
   test('isTcgCatalogItem should return false for non-TCG items', () => {
     expect(isTcgCatalogItem(videoGame)).toBe(false);
     expect(isTcgCatalogItem(console)).toBe(false);
+  });
+
+  // Split-view rows are a flat projection (no `details`), so they are matched
+  // only by `isCatalogVariantSearchItem` — never by the brand/product guards.
+  const variantRow = {
+    catalogItemId: '1',
+    catalogPublicId: 'pokemon-base1-4-en',
+    publicId: 'pokemon-base1-4-en:pv:holo',
+    title: 'Charizard',
+    variantKey: 'pv:holo::',
+    variantLabel: 'Holo',
+    variantName: 'Charizard 4/102 · Holo',
+    slug: 'charizard',
+    category: 'tcg' as const,
+    brand: 'pokemon' as const,
+    productType: 'card' as const,
+    pricing: { marketPrice: 12.5, condition: 'NM' },
+  } satisfies CatalogVariantSearchItem;
+
+  test('isCatalogVariantSearchItem should match a flat split-view row', () => {
+    expect(isCatalogVariantSearchItem(variantRow)).toBe(true);
+  });
+
+  test('isCatalogVariantSearchItem should not match a full catalog item', () => {
+    expect(isCatalogVariantSearchItem(pokemonCard)).toBe(false);
   });
 });
