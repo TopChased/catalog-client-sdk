@@ -85,3 +85,39 @@ export {
 
 // Export utilities
 export { buildURL, detectContext } from './utils';
+
+// omni read API (/api/v2)
+export { default as CatalogClientV2, CatalogApiError } from './v2/CatalogClientV2';
+export { isPokemonCardProduct, isRiftboundCardProduct } from './v2/types';
+export type {
+  TcgGameSlug,
+  LanguageCode,
+  LifecycleStatus,
+  TcgGameRef,
+  SeriesRef,
+  IllustratorRef,
+  IllustratorListItem,
+  CatalogSet,
+  CatalogCharacter,
+  PriceCondition,
+  ConditionPrice,
+  VariantPricing,
+  CatalogVariant,
+  PokemonCardDetailsV2,
+  RiftboundCardDetailsV2,
+  ProductType,
+  PokemonCardProduct,
+  RiftboundCardProduct,
+  SealedProduct,
+  CatalogProduct,
+  VariantPrices,
+  ProductSummary,
+  Page,
+  SearchSort,
+  SearchParams,
+  SearchPage,
+  SuggestedCharacter,
+  SuggestedSet,
+  SuggestedProduct,
+  Suggestions,
+} from './v2/types';
