@@ -232,12 +232,19 @@ export interface SearchParams {
   kind?: 'card' | 'sealed';
   sort?: SearchSort;
   order?: 'asc' | 'desc';
+  /**
+   * `stacked` (default): a doc per product. `split`: a doc per variant, sorted
+   * (price above all) and paged by that variant; each doc carries only that
+   * variant, so a product can repeat.
+   */
+  view?: 'stacked' | 'split';
   offset?: number;
   /** 1–100, default 20. */
   limit?: number;
 }
 
 export interface SearchPage {
+  /** Products; in split view, a product per variant hit with only that variant. */
   docs: CatalogProduct[];
   totalDocs: number;
   offset: number;
@@ -282,6 +289,8 @@ export interface SuggestedProduct {
   tcgGame: TcgGameSlug | null;
   setName: string | null;
   setCode: string | null;
+  /** The set's printed card count (the `102` in `4/102`). */
+  setPrintedTotal: number | null;
   image: string | null;
 }
 
