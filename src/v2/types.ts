@@ -43,9 +43,16 @@ export interface CatalogSet {
   releaseDate: string | null;
   printedTotal: number | null;
   total: number | null;
-  images: { logo: string | null; symbol: string | null };
+  images: { logo: string | null; symbol: string | null; cover: string | null };
   tcgGame: TcgGameRef | null;
   series: SeriesRef | null;
+}
+
+export interface CatalogSeries extends SeriesRef {
+  /** Shown on the series banner in browse pages. */
+  description: string | null;
+  images: { banner: string | null };
+  tcgGame: TcgGameRef | null;
 }
 
 export interface CatalogCharacter {

@@ -4,6 +4,7 @@ import type {
   ApiErrorBody,
   CatalogCharacter,
   CatalogProduct,
+  CatalogSeries,
   CatalogSet,
   IllustratorListItem,
   LanguageCode,
@@ -115,6 +116,11 @@ export default class CatalogClientV2 {
     params: { tcgGame?: TcgGameSlug; kind?: CatalogCharacter['kind'] } = {},
   ): Promise<CatalogCharacter[]> {
     return (await this.get<{ docs: CatalogCharacter[] }>(`/characters${query(params)}`)).docs;
+  }
+
+  /** Active series in their browse order (`sortOrder`; for Pokémon, oldest first). */
+  public async listSeries(params: { tcgGame?: TcgGameSlug } = {}): Promise<CatalogSeries[]> {
+    return (await this.get<{ docs: CatalogSeries[] }>(`/series${query(params)}`)).docs;
   }
 
   /** Active sets, newest first. `series` is a series slug or publicId. */

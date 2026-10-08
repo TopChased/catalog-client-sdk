@@ -98,6 +98,7 @@ export type {
   IllustratorRef,
   IllustratorListItem,
   CatalogSet,
+  CatalogSeries,
   CatalogCharacter,
   PriceCondition,
   ConditionPrice,
