@@ -54,8 +54,12 @@ export interface CatalogCharacter {
   name: string;
   kind: 'champion' | 'pokemon' | 'trainer' | 'other';
   nationalDex: number | null;
+  /** Generation the Pokémon or form was introduced in. */
+  generation: number | null;
   /** publicId of the species this is a form of, e.g. Alolan Diglett → Diglett. */
   formOf: string | null;
+  /** publicId of the species this one evolves from, e.g. Raichu → Pikachu. */
+  evolvesFrom: string | null;
   aliases: string[];
   names: Array<{ language: string; name: string }>;
   portrait: string | null;
