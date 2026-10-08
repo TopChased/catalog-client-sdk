@@ -51,7 +51,7 @@ export interface CatalogSet {
 export interface CatalogSeries extends SeriesRef {
   /** Shown on the series banner in browse pages. */
   description: string | null;
-  images: { banner: string | null };
+  images: { banner: string | null; logo: string | null };
   tcgGame: TcgGameRef | null;
 }
 
