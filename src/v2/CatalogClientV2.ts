@@ -118,8 +118,13 @@ export default class CatalogClientV2 {
     return (await this.get<{ docs: CatalogCharacter[] }>(`/characters${query(params)}`)).docs;
   }
 
-  /** Active series in their browse order (`sortOrder`; for Pokémon, oldest first). */
-  public async listSeries(params: { tcgGame?: TcgGameSlug } = {}): Promise<CatalogSeries[]> {
+  /**
+   * Active series in their browse order (`sortOrder`; for Pokémon, oldest first).
+   * Series are shared by every language; `language` keeps those with a set in it.
+   */
+  public async listSeries(
+    params: { tcgGame?: TcgGameSlug; language?: LanguageCode | string } = {},
+  ): Promise<CatalogSeries[]> {
     return (await this.get<{ docs: CatalogSeries[] }>(`/series${query(params)}`)).docs;
   }
 

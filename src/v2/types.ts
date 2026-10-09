@@ -4,7 +4,7 @@
  */
 
 export type TcgGameSlug = 'pokemon' | 'riftbound' | (string & {});
-export type LanguageCode = 'en' | 'ja' | 'ko' | 'zh-cn';
+export type LanguageCode = 'en' | 'ja' | 'ko' | 'zh-tw' | 'zh-cn';
 export type LifecycleStatus = 'active' | 'hidden' | 'retired' | 'merged';
 
 export interface TcgGameRef {
@@ -33,11 +33,18 @@ export interface IllustratorListItem extends IllustratorRef {
   tcgGames: TcgGameSlug[];
 }
 
+/** Names in other languages, e.g. a Japanese set's English translation. */
+export type LocalizedNames = Array<{ language: LanguageCode | string; name: string }>;
+
 export interface CatalogSet {
   publicId: string;
   slug: string;
   code: string;
+  /** In the set's language. */
   name: string;
+  /** `name`, followed by the English name in parentheses for a translated set: "黒炎の支配者 (Ruler of the Black Flame)". */
+  displayName: string;
+  names: LocalizedNames;
   language: LanguageCode;
   setType: 'main' | 'special' | 'subset' | 'promo';
   releaseDate: string | null;
@@ -49,6 +56,8 @@ export interface CatalogSet {
 }
 
 export interface CatalogSeries extends SeriesRef {
+  /** The series in other languages; `name` is English. */
+  names: LocalizedNames;
   /** Shown on the series banner in browse pages. */
   description: string | null;
   images: { banner: string | null; logo: string | null };
@@ -68,7 +77,7 @@ export interface CatalogCharacter {
   /** publicId of the species this one evolves from, e.g. Raichu → Pikachu. */
   evolvesFrom: string | null;
   aliases: string[];
-  names: Array<{ language: string; name: string }>;
+  names: Array<{ language: string; name: string; romanization?: string }>;
   portrait: string | null;
   tcgGame: TcgGameRef | null;
 }

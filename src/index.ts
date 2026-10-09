@@ -97,6 +97,7 @@ export type {
   SeriesRef,
   IllustratorRef,
   IllustratorListItem,
+  LocalizedNames,
   CatalogSet,
   CatalogSeries,
   CatalogCharacter,
