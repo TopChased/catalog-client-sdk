@@ -103,6 +103,8 @@ export type {
   CatalogCharacter,
   PriceCondition,
   ConditionPrice,
+  PriceWindowStats,
+  PriceStats,
   VariantPricing,
   CatalogVariant,
   PokemonCardDetailsV2,

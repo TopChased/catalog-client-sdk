@@ -84,10 +84,39 @@ export interface CatalogCharacter {
 
 export type PriceCondition = 'NM' | 'LP' | 'MP' | 'HP' | 'DMG';
 
+/** Market-price statistics over one window, in dollars. A field is `null` when the window lacks the points. */
+export interface PriceWindowStats {
+  /** Percent vs the window's first close. */
+  change: number | null;
+  min: number | null;
+  q1: number | null;
+  median: number | null;
+  q3: number | null;
+  max: number | null;
+  avg: number | null;
+  stdDev: number | null;
+  /** Priced days in the window. */
+  samples: number | null;
+}
+
+export interface PriceStats {
+  /** Last history day included, `YYYY-MM-DD`. */
+  asOf: string;
+  /** Percent vs yesterday's close. */
+  d1: { change: number | null };
+  d7: PriceWindowStats;
+  d30: PriceWindowStats;
+}
+
 export interface ConditionPrice {
   market: number | null;
   lowest: number | null;
+  highest: number | null;
   listings: number | null;
+  /** Last successful observation; prices older than a day should show "as of". */
+  observedAt: string | null;
+  /** `null` until price history has been computed. */
+  stats: PriceStats | null;
 }
 
 export interface VariantPricing {
