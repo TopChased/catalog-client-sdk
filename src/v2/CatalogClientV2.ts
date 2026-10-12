@@ -8,6 +8,9 @@ import type {
   CatalogSet,
   IllustratorListItem,
   LanguageCode,
+  MoversParams,
+  PriceCondition,
+  PriceHistory,
   Page,
   ProductSummary,
   SearchPage,
@@ -102,6 +105,22 @@ export default class CatalogClientV2 {
   /** Latest prices of one variant. */
   public getVariantPrices(variantPublicId: string): Promise<VariantPrices | null> {
     return this.lookup(`/variants/${encodeURIComponent(variantPublicId)}/prices`);
+  }
+
+  /**
+   * One variant's daily price series for one condition, with a summary.
+   * `days` 1–730 (default 90), `condition` default `NM`.
+   */
+  public getPriceHistory(
+    variantPublicId: string,
+    params: { condition?: PriceCondition; days?: number } = {},
+  ): Promise<PriceHistory | null> {
+    return this.lookup(`/variants/${encodeURIComponent(variantPublicId)}/prices/history${query(params)}`);
+  }
+
+  /** The products whose NM price moved most, as a search page. */
+  public getMovers(params: MoversParams = {}): Promise<SearchPage> {
+    return this.get(`/prices/movers${query(params)}`);
   }
 
   /** Illustrators by name, paged, with their product counts and games. */

@@ -47,6 +47,25 @@ describe('CatalogClientV2', () => {
     await expect(client.listSets({ tcgGame: 'yugioh' })).rejects.toBeInstanceOf(CatalogApiError);
   });
 
+  test('getPriceHistory sends condition and days, and returns null for an unknown variant', async () => {
+    respond(200, { variant: 'var_1', condition: 'LP', days: 30, points: [], summary: {} });
+    const history = await client.getPriceHistory('var_1', { condition: 'LP', days: 30 });
+    expect(history?.condition).toBe('LP');
+    expect(mockFetch.mock.calls[0][0]).toBe(`${BASE_URL}/variants/var_1/prices/history?condition=LP&days=30`);
+
+    respond(404, { error: { status: 404, message: 'Variant not found.' } });
+    expect(await client.getPriceHistory('var_nope')).toBeNull();
+    expect(mockFetch.mock.calls[1][0]).toBe(`${BASE_URL}/variants/var_nope/prices/history`);
+  });
+
+  test('getMovers passes window, direction and filters', async () => {
+    respond(200, { docs: [], totalDocs: 0, offset: 0, limit: 5, hasMore: false, cardNumber: null });
+    await client.getMovers({ window: '7d', direction: 'down', tcgGame: 'pokemon', minPrice: 10, limit: 5 });
+    expect(mockFetch.mock.calls[0][0]).toBe(
+      `${BASE_URL}/prices/movers?window=7d&direction=down&tcgGame=pokemon&minPrice=10&limit=5`,
+    );
+  });
+
   test('list methods send only the given params and unwrap docs', async () => {
     respond(200, { docs: [{ publicId: 'chr_1', name: 'Bulbasaur' }] });
     const characters = await client.listCharacters({ tcgGame: 'pokemon' });

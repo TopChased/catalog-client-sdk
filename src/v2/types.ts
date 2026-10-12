@@ -112,6 +112,7 @@ export interface ConditionPrice {
   market: number | null;
   lowest: number | null;
   highest: number | null;
+  /** Listings behind the market price; TCGplayer caps it at 25, so 25 means "25 or more". */
   listings: number | null;
   /** Last successful observation; prices older than a day should show "as of". */
   observedAt: string | null;
@@ -256,7 +257,22 @@ export interface Page<T> {
 }
 
 /** Sort fields of `GET /search`; `relevance` ranks by the query. */
-export type SearchSort = 'relevance' | 'number' | 'pokedex' | 'price' | 'releaseDate' | 'title' | 'illustrator';
+/**
+ * Sort fields of `GET /search`; `relevance` ranks by the query. `change1` /
+ * `change7`: NM market change vs yesterday / 7 days ago, percent (by the
+ * product's default variant, or the variant in split view).
+ */
+export type SearchSort =
+  | 'relevance'
+  | 'number'
+  | 'pokedex'
+  | 'price'
+  | 'releaseDate'
+  | 'title'
+  | 'illustrator'
+  | 'rarity'
+  | 'change1'
+  | 'change7';
 
 /**
  * Params of `GET /search`. Lists take several values (OR'd). `set`, `series`,
@@ -279,6 +295,10 @@ export interface SearchParams {
   /** Every Pokémon in the character's evolution family. */
   includeEvolutions?: boolean;
   kind?: 'card' | 'sealed';
+  /** NM market price at least this, in dollars. */
+  minPrice?: number;
+  /** At least this many NM listings (TCGplayer caps the count at 25). */
+  minListings?: number;
   sort?: SearchSort;
   order?: 'asc' | 'desc';
   /**
@@ -290,6 +310,55 @@ export interface SearchParams {
   offset?: number;
   /** 1–100, default 20. */
   limit?: number;
+}
+
+/**
+ * Params of `GET /prices/movers`: the products whose NM price moved most. Takes
+ * the search filters too (game, language, set, character, …). `minPrice`
+ * defaults to 5 and `minListings` to 3, which keep tiny and thinly listed
+ * cards off the list.
+ */
+export interface MoversParams
+  extends Omit<SearchParams, 'sort' | 'order' | 'view' | 'offset' | 'limit'> {
+  /** `1d` (default): vs yesterday's close. `7d`: vs 7 days ago. */
+  window?: '1d' | '7d';
+  /** `up` (default): biggest risers first. `down`: biggest fallers first. */
+  direction?: 'up' | 'down';
+  /** 1–50, default 10. */
+  limit?: number;
+}
+
+/**
+ * One day of a variant's price series, in dollars. Not observed: `listings`
+ * and every price `null`. Observed with nothing listed: `listings: 0`.
+ * Backfilled weekly points sit on their first day with `spanDays: 7`.
+ */
+export interface PricePoint {
+  /** `YYYY-MM-DD`, UTC. */
+  day: string;
+  market: number | null;
+  lowest: number | null;
+  highest: number | null;
+  listings: number | null;
+  /** Sales in the point's span (backfilled points only). */
+  sold: number | null;
+  transactions: number | null;
+  lowSale: number | null;
+  highSale: number | null;
+  /** 1 for a daily point, 7 for a backfilled week; `null` when not observed. */
+  spanDays: number | null;
+}
+
+/** `GET /variants/:publicId/prices/history` */
+export interface PriceHistory {
+  /** The variant's publicId. */
+  variant: string;
+  condition: PriceCondition;
+  days: number;
+  /** One per day, oldest first, ending today. */
+  points: PricePoint[];
+  /** Market-price statistics over the range (daily points only). */
+  summary: PriceWindowStats;
 }
 
 export interface SearchPage {
