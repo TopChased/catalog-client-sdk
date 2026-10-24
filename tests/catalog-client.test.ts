@@ -547,6 +547,29 @@ describe('SearchQueryBuilder', () => {
     expect(url).toContain('offset=10');
   });
 
+  describe('view', () => {
+    test('should send view=split for split mode', async () => {
+      await client.search()
+        .view('split')
+        .sort('price', 'asc')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('view=split');
+      expect(url).toContain('sortBy=price');
+      expect(url).toContain('sortOrder=asc');
+    });
+
+    test('should send view=stacked for stacked mode', async () => {
+      await client.search()
+        .view('stacked')
+        .execute();
+
+      const url = mockFetch.mock.calls[0][0] as string;
+      expect(url).toContain('view=stacked');
+    });
+  });
+
   describe('sort', () => {
     test('should sort by rarity asc', async () => {
       await client.search()

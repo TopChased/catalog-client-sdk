@@ -28,8 +28,12 @@ pnpm add /path/to/catalog/client
 ## Publish 
 
 ```bash
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
 npm login
-npm publish --access public
+# npm publish --access public --tag latest
+npm publish --access public --tag preview
 ```
 
 ## Quick Start
