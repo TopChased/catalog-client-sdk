@@ -33,6 +33,40 @@ export interface IllustratorListItem extends IllustratorRef {
   tcgGames: TcgGameSlug[];
 }
 
+/** One illustrator in `GET /illustrators/previews`: their slug (or publicId), in one game. */
+export interface IllustratorPreviewItem {
+  tcgGame: TcgGameSlug;
+  illustrator: string;
+}
+
+export interface IllustratorPreviewParams {
+  /** Cards per illustrator, 1–12 (default 6). */
+  cards?: number;
+  /** Leave out cards with fewer NM listings, whose prices can be one-off outliers. */
+  minListings?: number;
+}
+
+/** A previewed card: enough to show it and link to its card page. */
+export interface PreviewCard {
+  publicId: string;
+  slug: string;
+  title: string;
+  /** The small image, else the full-size one (Riftbound only has that). */
+  image: string | null;
+  /** Game slug. */
+  tcgGame: TcgGameSlug | null;
+  language: LanguageCode | null;
+  setCode: string | null;
+  number: string | null;
+  /** The default variant's NM market price. */
+  price: number | null;
+}
+
+/** An illustrator's most valuable cards, most valuable first. */
+export interface IllustratorPreview extends IllustratorPreviewItem {
+  cards: PreviewCard[];
+}
+
 /** Names in other languages, e.g. a Japanese set's English translation. */
 export type LocalizedNames = Array<{ language: LanguageCode | string; name: string }>;
 
