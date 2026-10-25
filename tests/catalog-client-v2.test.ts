@@ -114,6 +114,27 @@ describe('CatalogClientV2', () => {
     );
   });
 
+  test('getIllustratorPreviews sends game:illustrator pairs and options, and returns the docs', async () => {
+    const preview = { tcgGame: 'pokemon', illustrator: 'mitsuhiro-arita', cards: [{ publicId: 'prd_1', price: 954.65 }] };
+    respond(200, { docs: [preview] });
+    const previews = await client.getIllustratorPreviews(
+      [
+        { tcgGame: 'pokemon', illustrator: 'mitsuhiro-arita' },
+        { tcgGame: 'riftbound', illustrator: 'kudos-productions' },
+      ],
+      { cards: 1, minListings: 3 },
+    );
+    expect(previews).toEqual([preview]);
+    expect(mockFetch.mock.calls[0][0]).toBe(
+      `${BASE_URL}/illustrators/previews?items=pokemon%3Amitsuhiro-arita%2Criftbound%3Akudos-productions&cards=1&minListings=3`,
+    );
+  });
+
+  test('getIllustratorPreviews skips the request for no items', async () => {
+    expect(await client.getIllustratorPreviews([])).toEqual([]);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
   test('suggest calls /search/suggest', async () => {
     respond(200, { characters: [], sets: [], products: [], exactCharacter: null });
     await client.suggest({ q: 'pika', tcgGame: 'pokemon' });

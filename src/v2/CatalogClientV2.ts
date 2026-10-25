@@ -7,6 +7,9 @@ import type {
   CatalogSeries,
   CatalogSet,
   IllustratorListItem,
+  IllustratorPreview,
+  IllustratorPreviewItem,
+  IllustratorPreviewParams,
   LanguageCode,
   MoversParams,
   PriceCondition,
@@ -128,6 +131,22 @@ export default class CatalogClientV2 {
     params: { q?: string; limit?: number; page?: number } = {},
   ): Promise<Page<IllustratorListItem>> {
     return this.get(`/illustrators${query(params)}`);
+  }
+
+  /**
+   * Several illustrators' most valuable cards in one request, in the order
+   * given: a page of artist tiles without a search per artist. At most 25
+   * items; an unknown illustrator comes back with no cards rather than failing
+   * the batch.
+   */
+  public async getIllustratorPreviews(
+    items: IllustratorPreviewItem[],
+    params: IllustratorPreviewParams = {},
+  ): Promise<IllustratorPreview[]> {
+    if (!items.length) return [];
+    const pairs = items.map(({ tcgGame, illustrator }) => `${tcgGame}:${illustrator}`);
+    const path = `/illustrators/previews${query({ items: pairs, ...params })}`;
+    return (await this.get<{ docs: IllustratorPreview[] }>(path)).docs;
   }
 
   /** Active characters; Pokémon in Pokédex order with forms after their species. */
